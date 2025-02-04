@@ -1,8 +1,8 @@
 using UserManagement.Application.Configuration;
-using UserManagement.Application.Interfaces;
-using UserManagement.Application.Services;
 using UserManagement.Application.Extensions;
-
+using UserManagement.Application.Interfaces;
+using UserManagement.Application.Profiles;
+using UserManagement.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -14,7 +14,7 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
-//services.AddAutoMapper(typeof(Program).Assembly);
+services.AddAutoMapper(typeof(AutoMapperProfile));
 
 services.Configure<KeyCloakConfiguration>(configuration.GetSection(KeyCloakConfiguration.Section));
 services.AddSingleton<ITokenService, TokenService>();
