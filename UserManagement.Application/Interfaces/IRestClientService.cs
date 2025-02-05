@@ -1,8 +1,10 @@
-﻿namespace UserManagement.Application.Interfaces;
+﻿#nullable disable
+
+namespace UserManagement.Application.Interfaces;
 
 public interface IRestClientService
 {
-    Task<List<T>> GetAsync<T>(string endpoint, string token, Dictionary<string, string> queryParameters);
+    Task<IEnumerable<T>> GetAsync<T>(string endpoint, string token, Dictionary<string, string> queryParameters = null);
 
     Task<RestResponse> SendPostRequestAsync<T>(string endpoint, string token, T body) where T : class;
 

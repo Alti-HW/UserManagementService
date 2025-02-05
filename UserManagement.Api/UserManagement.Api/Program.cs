@@ -21,6 +21,8 @@ services.AddSingleton<ITokenService, TokenService>();
 services.AddSingleton<IRestClientService, RestClientService>();
 
 services.AddScoped<IUserService, UserService>();
+services.AddScoped<IClientService, ClientService>();
+services.AddScoped<IRoleMappingService, RoleMappingService>();
 
 var app = builder.Build();
 

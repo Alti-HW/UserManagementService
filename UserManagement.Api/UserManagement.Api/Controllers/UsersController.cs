@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UserManagement.Application.Constants;
 using UserManagement.Application.Dtos;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Params;
@@ -21,17 +22,30 @@ public class UsersController : ControllerBase
     {
         if (filterParams.First < 0 || filterParams.Max <= 0 || filterParams.Max > 100)
         {
-            return BadRequest("Invalid pagination values. 'First' must be 0 or greater, and 'Max' must be between 1 and 100.");
+            return BadRequest(new ApiResponse<IEnumerable<UserDto>>
+            {
+                Success = false,
+                Message = "Invalid pagination values. 'First' must be 0 or greater, and 'Max' must be between 1 and 100.",
+            });
         }
 
         var users = await userService.GetUsers(filterParams);
 
         if (users == null || !users.Any())
         {
-            return NoContent();
+            return NotFound(new ApiResponse<IEnumerable<UserDto>>
+            {
+                Success = false,
+                Message = ResponseMessages.NoDataFound,
+            });
         }
 
-        return Ok(users);
+        return Ok(new ApiResponse<IEnumerable<UserDto>>
+        {
+            Success = true,
+            Message = ResponseMessages.DataRetrieved,
+            Data = users
+        });
     }
 
     [HttpPost]
@@ -39,17 +53,33 @@ public class UsersController : ControllerBase
     {
         if (filterParams == null)
         {
-            return BadRequest("User data is required.");
+            return BadRequest(new ApiResponse<UserDto>
+            {
+                Success = false,
+                Message = "User data is required.",
+            });
         }
 
         var response = await userService.CreateUser(filterParams);
 
         if (response == null)
         {
-            return StatusCode(500, "User creation failed.");
+            return StatusCode(500, new ApiResponse<UserDto>
+            {
+                Success = false,
+                Message = "User creation failed due to an internal server error.",
+            });
         }
 
-        return CreatedAtAction(nameof(GetUser), new { userId = response.Id }, response);
+        return CreatedAtAction(
+            nameof(GetUser),
+            new { userId = response.Id },
+            new ApiResponse<UserDto>
+            {
+                Success = true,
+                Message = ResponseMessages.RecordCreated.Replace("{Record}", "User"),
+                Data = response
+            });
     }
 
     [HttpPut]
@@ -57,17 +87,30 @@ public class UsersController : ControllerBase
     {
         if (filterParams == null || filterParams.Id == Guid.Empty)
         {
-            return BadRequest("Invalid user data.");
+            return BadRequest(new ApiResponse<UserDto>
+            {
+                Success = false,
+                Message = "Invalid user data."
+            });
         }
 
         var response = await userService.PutUser(filterParams);
 
         if (response == false)
         {
-            return NotFound("User not found.");
+            return NotFound(new ApiResponse<UserDto>
+            {
+                Success = false,
+                Message = ResponseMessages.RecordNotFound.Replace("{Record}", "User"),
+            });
         }
 
-        return NoContent();
+
+        return Ok(new ApiResponse<UserDto>
+        {
+            Success = true,
+            Message = ResponseMessages.RecordUpdated.Replace("{Record}", "User")
+        });
     }
 
     [HttpGet("{userId}")]
@@ -75,16 +118,59 @@ public class UsersController : ControllerBase
     {
         if (string.IsNullOrWhiteSpace(userId))
         {
-            return BadRequest("Invalid user ID.");
+            return BadRequest(new ApiResponse<UserDto>
+            {
+                Success = false,
+                Message = "Invalid user data.",
+            });
         }
 
         var user = await userService.GetUser(new Guid(userId));
 
         if (user == null)
         {
-            return NotFound();
+            return NotFound(new ApiResponse<UserDto>
+            {
+                Success = false,
+                Message = ResponseMessages.RecordNotFound.Replace("{Record}", "User"),
+            });
         }
 
-        return Ok(user);
+        return Ok(new ApiResponse<UserDto>
+        {
+            Success = true,
+            Message = ResponseMessages.DataRetrieved,
+            Data = user,
+        });
+    }
+
+    [HttpDelete("{userId}")]
+    public async Task<IActionResult> DeleteUser([FromRoute] string userId)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return BadRequest(new ApiResponse<UserDto>
+            {
+                Success = false,
+                Message = "Invalid user data.",
+            });
+        }
+
+        var response = await userService.DeleteUser(new Guid(userId));
+
+        if (response == false)
+        {
+            return NotFound(new ApiResponse<UserDto>
+            {
+                Success = false,
+                Message = ResponseMessages.RecordNotFound.Replace("{Record}", "User")
+            });
+        }
+
+        return Ok(new ApiResponse<UserDto>
+        {
+            Success = true,
+            Message = ResponseMessages.RecordDeleted.Replace("{Record}", "User")
+        });
     }
 }

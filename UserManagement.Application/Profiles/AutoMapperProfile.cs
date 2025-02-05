@@ -15,5 +15,8 @@ public class AutoMapperProfile : Profile
             .ReverseMap()
             .ForMember(d => d.CreatedTimestamp, opt => opt.MapFrom(src => src.Created.ToUnixTimestamp()))
             .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()));
+
+        CreateMap<Client, ClientDto>().ReverseMap();
+        CreateMap<RoleRepresentation, RoleRepresentationDto>().ReverseMap();
     }
 }

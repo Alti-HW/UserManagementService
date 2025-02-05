@@ -11,7 +11,7 @@ public class RestClientService : IRestClientService
         PropertyNameCaseInsensitive = true
     };
 
-    public async Task<List<T>> GetAsync<T>(string endpoint, string token, Dictionary<string, string> queryParameters)
+    public async Task<IEnumerable<T>> GetAsync<T>(string endpoint, string token, Dictionary<string, string> queryParameters = null)
     {
         var options = new RestClientOptions(endpoint);
         var client = new RestClient(options);
@@ -21,9 +21,12 @@ public class RestClientService : IRestClientService
         // Add Authorization Header
         request.AddHeader("Authorization", $"Bearer {token}");
 
-        foreach (var queryParameter in queryParameters)
+        if (queryParameters is not null)
         {
-            request.AddQueryParameter(queryParameter.Key, queryParameter.Value);
+            foreach (var queryParameter in queryParameters)
+            {
+                request.AddQueryParameter(queryParameter.Key, queryParameter.Value);
+            }
         }
 
         var response = await client.GetAsync(request);
@@ -33,7 +36,7 @@ public class RestClientService : IRestClientService
             return new List<T>();
         }
 
-        return System.Text.Json.JsonSerializer.Deserialize<List<T>>(response.Content, _jsonSerializerOptions);
+        return JsonConvert.DeserializeObject<IEnumerable<T>>(response.Content);
     }
 
     public async Task<RestResponse> SendPostRequestAsync<T>(string url, string token, T body) where T : class
