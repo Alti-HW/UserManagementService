@@ -13,4 +13,6 @@ public interface IRestClientService
     Task<T> SendGetRequestAsync<T>(string endpoint, string token);
 
     Task<RestResponse> SendDeleteRequestAsync(string endpoint, string token);
+
+    Task<RestResponse> SendDeleteRequestAsync<T>(string endpoint, string token, T body = null) where T : class;
 }

@@ -91,4 +91,17 @@ public class RestClientService : IRestClientService
 
         return await client.ExecuteAsync(request);
     }
+
+    public async Task<RestResponse> SendDeleteRequestAsync<T>(string endpoint, string token, T body) where T : class
+    {
+        var client = new RestClient();
+
+        var request = new RestRequest(endpoint, Method.Delete);
+        request.AddHeader("Authorization", $"Bearer {token}");
+        request.AddHeader("Content-Type", "application/json");
+
+        request.AddJsonBody(new[] { body });
+
+        return await client.ExecuteAsync(request);
+    }
 }

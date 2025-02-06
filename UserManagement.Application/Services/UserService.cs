@@ -66,7 +66,7 @@ public class UserService : IUserService
     {
         if (inputUser == null)
         {
-            throw new ArgumentNullException(nameof(inputUser));
+            throw new ArgumentNullException(nameof(UserDto));
         }
 
         var token = await tokenService.GetBearerTokenAsync();
@@ -91,6 +91,11 @@ public class UserService : IUserService
         inputUser.Id = inputUser.Id is null || inputUser.Id == Guid.Empty ? Guid.NewGuid() : inputUser.Id;
 
         var response = await this.restClientService.SendPostRequestAsync(endpoint, token, mapper.Map<Users>(inputUser));
+
+        if (response is null || response?.IsSuccessStatusCode is false)
+        {
+            return null;
+        }
 
         return (await this.GetUsers(new UserFilterParams
         {

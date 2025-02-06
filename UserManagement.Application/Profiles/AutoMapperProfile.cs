@@ -18,5 +18,7 @@ public class AutoMapperProfile : Profile
 
         CreateMap<Client, ClientDto>().ReverseMap();
         CreateMap<RoleRepresentation, RoleRepresentationDto>().ReverseMap();
+        CreateMap<ClientMappingsRepresentation, ClientMappingsRepresentationDto>().ReverseMap();
+        CreateMap<RealmMappingsResponse, RealmMappingsResponseDto>().ReverseMap();
     }
 }
