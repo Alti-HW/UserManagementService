@@ -3,7 +3,6 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using UserManagement.Application.Configuration;
-using UserManagement.Application.Dtos;
 using UserManagement.Application.Extensions;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Profiles;
@@ -13,6 +12,8 @@ using UserManagement.Application.Validator;
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
+
+//builder.WebHost.UseUrls("http://localhost:5226");
 
 // Add services to the container.
 

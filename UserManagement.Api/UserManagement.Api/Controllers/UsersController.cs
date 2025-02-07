@@ -1,13 +1,10 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
-using FluentValidation.Results;
+﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UserManagement.Application.Constants;
 using UserManagement.Application.Dtos;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Params;
-using UserManagement.Application.Validator;
 
 namespace UserManagement.Api.Controllers;
 
