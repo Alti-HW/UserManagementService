@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿#nullable disable
+
+using System.Text.Json;
+using AutoMapper;
 using UserManagement.Application.Dtos;
 using UserManagement.Application.Extensions;
 using UserManagement.Application.Models;
@@ -83,9 +86,11 @@ public class RoleMappingService : IRoleMappingService
 
         var response = await this.restClientService.SendPostRequestAsync(endpoint, token, roleRepresentation);
 
-        if (response?.IsSuccessStatusCode is false)
+        if (response is null || response?.IsSuccessStatusCode is false)
         {
-            throw new InvalidOperationException(response?.ErrorMessage, response?.ErrorException?.InnerException);
+            ThrowErrorMessage(response);
+
+            throw new InvalidOperationException("Error occurred while creating new user");
         }
 
         return response?.IsSuccessStatusCode ?? false;
@@ -106,14 +111,36 @@ public class RoleMappingService : IRoleMappingService
         var endpoint = $"{this.keyCloakConfiguration.ServerUrl}/admin/realms/{this.keyCloakConfiguration.Realm}/users/{inputUserRoleRepresentationDto.UserId}" +
                        $"/role-mappings/clients/{clientId}";
 
-        var response = await this.restClientService.SendDeleteRequestAsync(endpoint, token,roleRepresentation );
+        var response = await this.restClientService.SendDeleteRequestAsync(endpoint, token, roleRepresentation);
 
-        if (response?.IsSuccessStatusCode is false)
+        if (response is null || response?.IsSuccessStatusCode is false)
         {
-            throw new InvalidOperationException(response?.ErrorMessage, response?.ErrorException?.InnerException);
+            ThrowErrorMessage(response);
+
+            throw new InvalidOperationException("Error occurred while creating new user");
         }
 
         return response?.IsSuccessStatusCode ?? false;
+    }
+
+    private static void ThrowErrorMessage(RestResponse response)
+    {
+        if (!string.IsNullOrWhiteSpace(response?.Content))
+        {
+            var errorMessage = GetErrorMessage(response);
+
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                throw new InvalidOperationException(errorMessage);
+            }
+        }
+    }
+
+    private static string GetErrorMessage(RestResponse response)
+    {
+        var doc = JsonDocument.Parse(response?.Content);
+
+        return doc.RootElement.GetProperty("errorMessage").GetString();
     }
 
     private async Task<Guid?> GetClientId()

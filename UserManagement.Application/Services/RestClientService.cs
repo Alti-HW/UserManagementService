@@ -100,7 +100,7 @@ public class RestClientService : IRestClientService
         request.AddHeader("Authorization", $"Bearer {token}");
         request.AddHeader("Content-Type", "application/json");
 
-        request.AddJsonBody(new[] { body });
+        request.AddJsonBody(body);
 
         return await client.ExecuteAsync(request);
     }
