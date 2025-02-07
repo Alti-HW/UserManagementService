@@ -4,7 +4,7 @@ public class UserFilterParams
 {
     public string? Email { get; set; }
     public bool? EmailVerified { get; set; }
-    public bool? Enabled { get; set; } = true;
+    public bool? Enabled { get; set; }
     public bool? Exact { get; set; }
     public int? First { get; set; } = 0;
     public string? FirstName { get; set; }

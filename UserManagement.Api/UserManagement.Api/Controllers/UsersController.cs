@@ -1,15 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UserManagement.Application.Constants;
 using UserManagement.Application.Dtos;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Params;
+using UserManagement.Application.Validator;
 
 namespace UserManagement.Api.Controllers;
 
 /// <summary>
 /// Controller for managing users.
 /// </summary>
+[Produces("application/json")]
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController : ControllerBase
@@ -71,7 +76,7 @@ public class UsersController : ControllerBase
     /// <summary>
     /// Creates a new user.
     /// </summary>
-    /// <param name="filterParams">User data.</param>
+    /// <param name="inputUser">User data.</param>
     /// <returns>Created user details.</returns>
     /// <response code="201">User successfully created.</response>
     /// <response code="400">If the request data is invalid.</response>
@@ -81,18 +86,9 @@ public class UsersController : ControllerBase
     [SwaggerResponse(201, "User created successfully", typeof(ApiResponse<UserDto>))]
     [SwaggerResponse(400, "User data is required.")]
     [SwaggerResponse(500, "Internal server error.")]
-    public async Task<IActionResult> Post([FromBody] UserDto filterParams)
+    public async Task<IActionResult> Post([FromBody] UserDto inputUser)
     {
-        if (filterParams == null)
-        {
-            return BadRequest(new ApiResponse<UserDto>
-            {
-                Success = false,
-                Message = "User data is required.",
-            });
-        }
-
-        var response = await userService.CreateUser(filterParams);
+        var response = await userService.CreateUser(inputUser);
 
         if (response == null)
         {
@@ -117,28 +113,20 @@ public class UsersController : ControllerBase
     /// <summary>
     /// Updates an existing user.
     /// </summary>
-    /// <param name="filterParams">User data to be updated.</param>
+    /// <param name="inputUser">User data to be updated.</param>
     /// <returns>Updated user details.</returns>
     /// <response code="200">User successfully updated.</response>
     /// <response code="400">If the request data is invalid.</response>
     /// <response code="404">If the user is not found.</response>
     [HttpPut]
+    [RuleSetForClientSideMessages("All", "Id")]
     [SwaggerOperation(Summary = "Update user", Description = "Updates an existing user.")]
     [SwaggerResponse(200, "User updated successfully", typeof(ApiResponse<UserDto>))]
     [SwaggerResponse(400, "Invalid user data.")]
     [SwaggerResponse(404, "User not found.")]
-    public async Task<IActionResult> Put([FromBody] UserDto filterParams)
+    public async Task<IActionResult> Put([FromBody] UserDto inputUser)
     {
-        if (filterParams == null || filterParams.Id == Guid.Empty)
-        {
-            return BadRequest(new ApiResponse<UserDto>
-            {
-                Success = false,
-                Message = "Invalid user data."
-            });
-        }
-
-        var response = await userService.PutUser(filterParams);
+        var response = await userService.PutUser(inputUser);
 
         if (response == false)
         {

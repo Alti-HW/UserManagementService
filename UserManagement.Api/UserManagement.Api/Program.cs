@@ -1,10 +1,14 @@
-using Microsoft.OpenApi.Models;
 using System.Reflection;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.OpenApi.Models;
 using UserManagement.Application.Configuration;
+using UserManagement.Application.Dtos;
 using UserManagement.Application.Extensions;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Profiles;
 using UserManagement.Application.Services;
+using UserManagement.Application.Validator;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -36,6 +40,13 @@ services.AddSingleton<IRestClientService, RestClientService>();
 services.AddScoped<IUserService, UserService>();
 services.AddScoped<IClientService, ClientService>();
 services.AddScoped<IRoleMappingService, RoleMappingService>();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+
+builder.Services.AddValidatorsFromAssemblyContaining<UserRequestValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UserRoleRepresentationRequestValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<RoleRepresentationRequestValidator>();
 
 var app = builder.Build();
 

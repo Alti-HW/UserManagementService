@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+using System.Text.Json;
 using AutoMapper;
 using UserManagement.Application.Dtos;
 using UserManagement.Application.Extensions;
@@ -23,6 +24,16 @@ public class UserService : IUserService
         this.restClientService = restClientService;
         this.mapper = mapper;
         this.keyCloakConfiguration = keyCloakConfiguration.Value;
+
+        if (this.keyCloakConfiguration == null)
+        {
+            throw new InvalidOperationException("Keycloak configuration is null.");
+        }
+
+        if (string.IsNullOrEmpty(this.keyCloakConfiguration.ServerUrl) || string.IsNullOrEmpty(this.keyCloakConfiguration.Realm))
+        {
+            throw new InvalidOperationException("Invalid Keycloak configuration values.");
+        }
     }
 
     public async Task<IEnumerable<UserDto>> GetUsers(UserFilterParams userFilterParams)
@@ -32,23 +43,7 @@ public class UserService : IUserService
             throw new ArgumentNullException(nameof(userFilterParams));
         }
 
-        if (this.keyCloakConfiguration == null)
-        {
-            throw new InvalidOperationException("Keycloak configuration is null.");
-        }
-
-        var token = await tokenService.GetBearerTokenAsync();
-
-        if (string.IsNullOrEmpty(token))
-        {
-            throw new InvalidOperationException("Failed to retrieve bearer token.");
-        }
-
-        if (string.IsNullOrEmpty(this.keyCloakConfiguration.ServerUrl) || string.IsNullOrEmpty(this.keyCloakConfiguration.Realm))
-        {
-            throw new InvalidOperationException("Invalid Keycloak configuration values.");
-        }
-
+        var token = await tokenService.GetToken();
         var endpoint = $"{this.keyCloakConfiguration.ServerUrl}/admin/realms/{this.keyCloakConfiguration.Realm}/users";
         var queryParameters = userFilterParams.ToFilteredDictionary();
 
@@ -64,28 +59,7 @@ public class UserService : IUserService
 
     public async Task<UserDto> CreateUser(UserDto inputUser)
     {
-        if (inputUser == null)
-        {
-            throw new ArgumentNullException(nameof(UserDto));
-        }
-
-        var token = await tokenService.GetBearerTokenAsync();
-
-        if (this.keyCloakConfiguration == null)
-        {
-            throw new InvalidOperationException("Keycloak configuration is null.");
-        }
-
-        if (string.IsNullOrEmpty(token))
-        {
-            throw new InvalidOperationException("Failed to retrieve bearer token.");
-        }
-
-        if (string.IsNullOrEmpty(this.keyCloakConfiguration.ServerUrl) || string.IsNullOrEmpty(this.keyCloakConfiguration.Realm))
-        {
-            throw new InvalidOperationException("Invalid Keycloak configuration values.");
-        }
-
+        var token = await tokenService.GetToken();
         var endpoint = $"{this.keyCloakConfiguration.ServerUrl}/admin/realms/{this.keyCloakConfiguration.Realm}/users";
 
         inputUser.Id = inputUser.Id is null || inputUser.Id == Guid.Empty ? Guid.NewGuid() : inputUser.Id;
@@ -94,7 +68,9 @@ public class UserService : IUserService
 
         if (response is null || response?.IsSuccessStatusCode is false)
         {
-            return null;
+            ThrowErrorMessage(response);
+
+            throw new InvalidOperationException("Error occurred while creating new user");
         }
 
         return (await this.GetUsers(new UserFilterParams
@@ -111,31 +87,17 @@ public class UserService : IUserService
             throw new ArgumentNullException(nameof(inputUser));
         }
 
-        if (this.keyCloakConfiguration == null)
-        {
-            throw new InvalidOperationException("Keycloak configuration is null.");
-        }
-
-        var token = await tokenService.GetBearerTokenAsync();
-
-        if (string.IsNullOrEmpty(token))
-        {
-            throw new InvalidOperationException("Failed to retrieve bearer token.");
-        }
-
-        if (string.IsNullOrEmpty(this.keyCloakConfiguration.ServerUrl) || string.IsNullOrEmpty(this.keyCloakConfiguration.Realm))
-        {
-            throw new InvalidOperationException("Invalid Keycloak configuration values.");
-        }
-
-        if (inputUser.Id == null)
-        {
-            throw new ArgumentException("User ID cannot be null.", nameof(inputUser.Id));
-        }
-
+        var token = await tokenService.GetToken();
         var endpoint = $"{this.keyCloakConfiguration.ServerUrl}/admin/realms/{this.keyCloakConfiguration.Realm}/users/{inputUser.Id}";
 
         var response = await this.restClientService.SendPutRequestAsync(endpoint, token, mapper.Map<Users>(inputUser));
+
+        if (response is null || response?.IsSuccessStatusCode is false)
+        {
+            ThrowErrorMessage(response);
+
+            throw new InvalidOperationException("Error occurred while creating new user");
+        }
 
         return response?.IsSuccessStatusCode ?? false;
     }
@@ -147,23 +109,7 @@ public class UserService : IUserService
             throw new ArgumentException("User ID cannot be empty.", nameof(userId));
         }
 
-        if (this.keyCloakConfiguration == null)
-        {
-            throw new InvalidOperationException("Keycloak configuration is null.");
-        }
-
-        var token = await tokenService.GetBearerTokenAsync();
-
-        if (string.IsNullOrEmpty(token))
-        {
-            throw new InvalidOperationException("Failed to retrieve bearer token.");
-        }
-
-        if (string.IsNullOrEmpty(this.keyCloakConfiguration.ServerUrl) || string.IsNullOrEmpty(this.keyCloakConfiguration.Realm))
-        {
-            throw new InvalidOperationException("Invalid Keycloak configuration values.");
-        }
-
+        var token = await tokenService.GetToken();
         var endpoint = $"{this.keyCloakConfiguration.ServerUrl}/admin/realms/{this.keyCloakConfiguration.Realm}/users/{userId}?userProfileMetadata=true";
 
         var user = await this.restClientService.SendGetRequestAsync<Users>(endpoint, token);
@@ -183,27 +129,31 @@ public class UserService : IUserService
             throw new ArgumentException("User ID cannot be empty.", nameof(userId));
         }
 
-        if (this.keyCloakConfiguration == null)
-        {
-            throw new InvalidOperationException("Keycloak configuration is null.");
-        }
-
-        var token = await tokenService.GetBearerTokenAsync();
-
-        if (string.IsNullOrEmpty(token))
-        {
-            throw new InvalidOperationException("Failed to retrieve bearer token.");
-        }
-
-        if (string.IsNullOrEmpty(this.keyCloakConfiguration.ServerUrl) || string.IsNullOrEmpty(this.keyCloakConfiguration.Realm))
-        {
-            throw new InvalidOperationException("Invalid Keycloak configuration values.");
-        }
-
+        var token = await tokenService.GetToken();
         var endpoint = $"{this.keyCloakConfiguration.ServerUrl}/admin/realms/{this.keyCloakConfiguration.Realm}/users/{userId}";
 
         var response = await this.restClientService.SendDeleteRequestAsync(endpoint, token);
 
         return response?.IsSuccessStatusCode ?? false;
+    }    
+
+    private static void ThrowErrorMessage(RestResponse response)
+    {
+        if (!string.IsNullOrWhiteSpace(response?.Content))
+        {
+            var errorMessage = GetErrorMessage(response);
+
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                throw new InvalidOperationException(errorMessage);
+            }
+        }
+    }
+
+    private static string GetErrorMessage(RestResponse response)
+    {
+        var doc = JsonDocument.Parse(response?.Content);
+
+        return doc.RootElement.GetProperty("errorMessage").GetString();
     }
 }
