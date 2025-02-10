@@ -11,6 +11,8 @@ public class ApiResponse<T>
     public List<ValidationError> Errors { get; set; }
 
     public T Data { get; set; }
+
+
 }
 
 public class ValidationError

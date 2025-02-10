@@ -31,6 +31,17 @@ services.AddSwaggerGen(c =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 });
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
 services.AddAutoMapper(typeof(AutoMapperProfile));
 
@@ -41,6 +52,7 @@ services.AddSingleton<IRestClientService, RestClientService>();
 services.AddScoped<IUserService, UserService>();
 services.AddScoped<IClientService, ClientService>();
 services.AddScoped<IRoleMappingService, RoleMappingService>();
+services.AddScoped<IRoleService, RoleService>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
@@ -50,6 +62,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<UserRoleRepresentationReque
 builder.Services.AddValidatorsFromAssemblyContaining<RoleRepresentationRequestValidator>();
 
 var app = builder.Build();
+// Enable CORS
+app.UseCors("AllowAll");
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
