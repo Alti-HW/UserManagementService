@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/UserManagement.Application/obj/Debug/net8.0/ref/UserManagement.Application.dll
+/UserManagement.Api/UserManagement.Api/obj/Debug/net8.0/EndpointInfo/UserManagement.Api.json
+/UserManagement.Api/UserManagement.Api/obj/Debug/net8.0/EndpointInfo/UserManagement.Api.OpenApiFiles.cache
+/UserManagement.Api/UserManagement.Api/obj/Debug/net8.0/ref/UserManagement.Api.dll
+/UserManagement.Api/UserManagement.Api/obj/Debug/net8.0/refint/UserManagement.Api.dll

@@ -41,6 +41,7 @@ services.AddSingleton<IRestClientService, RestClientService>();
 services.AddScoped<IUserService, UserService>();
 services.AddScoped<IClientService, ClientService>();
 services.AddScoped<IRoleMappingService, RoleMappingService>();
+services.AddScoped<IRoleService, RoleService>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();

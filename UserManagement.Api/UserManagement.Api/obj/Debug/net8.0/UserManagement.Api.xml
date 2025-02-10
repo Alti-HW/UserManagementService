@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>UserManagement.Api</name>
+    </assembly>
+    <members>
+        <member name="T:UserManagement.Api.Controllers.RollMappingController">
+            <summary>
+            Controller for managing role mappings.
+            </summary>
+        </member>
+        <member name="M:UserManagement.Api.Controllers.RollMappingController.#ctor(UserManagement.Application.Interfaces.IRoleMappingService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:UserManagement.Api.Controllers.RollMappingController"/> class.
+            </summary>
+            <param name="roleMappingService">The role mapping service.</param>
+        </member>
+        <member name="M:UserManagement.Api.Controllers.RollMappingController.GetAvailableClientRoles(System.String)">
+            <summary>
+            Retrieves the available client roles for a specific user.
+            </summary>
+            <param name="userId">The ID of the user.</param>
+            <returns>A list of available client roles.</returns>
+            <response code="200">Returns the list of available client roles.</response>
+            <response code="400">If the user ID is invalid.</response>
+            <response code="404">If no roles are found.</response>
+        </member>
+        <member name="M:UserManagement.Api.Controllers.RollMappingController.GetRolesAssignedToUser(System.String)">
+            <summary>
+            Retrieves the roles assigned to a specific user.
+            </summary>
+            <param name="userId">The ID of the user.</param>
+            <returns>A list of assigned roles.</returns>
+            <response code="200">Returns the user's assigned roles.</response>
+            <response code="400">If the user ID is invalid.</response>
+            <response code="404">If no roles are assigned to the user.</response>
+        </member>
+        <member name="M:UserManagement.Api.Controllers.RollMappingController.AssignRoleToUser(UserManagement.Application.Dtos.UserRoleRepresentationDto)">
+            <summary>
+            Assigns a role to the user.
+            </summary>
+            <param name="userRoleRepresentationDto">The user role data.</param>
+            <returns>Response indicating success or failure.</returns>
+            <response code="200">If the role mapping was created successfully.</response>
+            <response code="400">If the input data is invalid.</response>
+            <response code="422">If the user role mapping creation failed.</response>
+        </member>
+        <member name="M:UserManagement.Api.Controllers.RollMappingController.UnAssignRoleForUser(UserManagement.Application.Dtos.UserRoleRepresentationDto)">
+            <summary>
+            Unassigns a role from a user.
+            </summary>
+            <param name="userRoleRepresentationDto">User role data to unassign.</param>
+            <returns>Response indicating success or failure.</returns>
+            <response code="201">User role unassigned successfully.</response>
+            <response code="400">If the request data is invalid.</response>
+            <response code="422">If unassignment fails.</response>
+        </member>
+        <member name="T:UserManagement.Api.Controllers.UsersController">
+            <summary>
+            Controller for managing users.
+            </summary>
+        </member>
+        <member name="M:UserManagement.Api.Controllers.UsersController.#ctor(UserManagement.Application.Interfaces.IUserService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:UserManagement.Api.Controllers.UsersController"/> class.
+            </summary>
+            <param name="userService">The user service.</param>
+        </member>
+        <member name="M:UserManagement.Api.Controllers.UsersController.GetUsers(UserManagement.Application.Params.UserFilterParams)">
+            <summary>
+            Retrieves a list of users based on filters.
+            </summary>
+            <param name="filterParams">Filtering parameters for users.</param>
+            <returns>A list of users.</returns>
+            <response code="200">Returns the list of users.</response>
+            <response code="400">If the filter parameters are invalid.</response>
+            <response code="404">If no users are found.</response>
+        </member>
+        <member name="M:UserManagement.Api.Controllers.UsersController.Post(UserManagement.Application.Dtos.UserDto)">
+            <summary>
+            Creates a new user.
+            </summary>
+            <param name="inputUser">User data.</param>
+            <returns>Created user details.</returns>
+            <response code="201">User successfully created.</response>
+            <response code="400">If the request data is invalid.</response>
+            <response code="500">If the creation fails.</response>
+        </member>
+        <member name="M:UserManagement.Api.Controllers.UsersController.Put(UserManagement.Application.Dtos.UserDto)">
+            <summary>
+            Updates an existing user.
+            </summary>
+            <param name="inputUser">User data to be updated.</param>
+            <returns>Updated user details.</returns>
+            <response code="200">User successfully updated.</response>
+            <response code="400">If the request data is invalid.</response>
+            <response code="404">If the user is not found.</response>
+        </member>
+        <member name="M:UserManagement.Api.Controllers.UsersController.GetUser(System.String)">
+            <summary>
+            Retrieves a user by ID.
+            </summary>
+            <param name="userId">The ID of the user.</param>
+            <returns>User details.</returns>
+            <response code="200">User found and returned.</response>
+            <response code="400">If the user ID is invalid.</response>
+            <response code="404">If the user is not found.</response>
+        </member>
+        <member name="M:UserManagement.Api.Controllers.UsersController.DeleteUser(System.String)">
+            <summary>
+            Deletes a user by ID.
+            </summary>
+            <param name="userId">The ID of the user.</param>
+            <returns>Response indicating success or failure.</returns>
+            <response code="200">User successfully deleted.</response>
+            <response code="400">If the user ID is invalid.</response>
+            <response code="404">If the user is not found.</response>
+        </member>
+    </members>
+</doc>
