@@ -3,8 +3,35 @@
 ################################################################################
 
 /.vs
-/UserManagement.Application/obj/Debug/net8.0/ref/UserManagement.Application.dll
-/UserManagement.Api/UserManagement.Api/obj/Debug/net8.0/EndpointInfo/UserManagement.Api.json
-/UserManagement.Api/UserManagement.Api/obj/Debug/net8.0/EndpointInfo/UserManagement.Api.OpenApiFiles.cache
-/UserManagement.Api/UserManagement.Api/obj/Debug/net8.0/ref/UserManagement.Api.dll
-/UserManagement.Api/UserManagement.Api/obj/Debug/net8.0/refint/UserManagement.Api.dll
+/obj/Release/net8.0
+*.user
+
+
+# Build artifacts
+bin/
+obj/
+
+# User-specific files
+*.csproj.user
+*.csproj.backup
+*.suo
+
+# Visual Studio
+.vs/
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Secrets
+appsettings.Local.json
+
+# Node.js dependencies (if applicable)
+node_modules/
+
+# Rider IDE files
+.idea/
+/UserManagement.Application/obj/Debug/net8.0/UserManagement.Application.sourcelink.json
