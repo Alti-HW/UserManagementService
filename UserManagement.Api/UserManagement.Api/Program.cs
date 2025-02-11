@@ -16,7 +16,7 @@ var configuration = builder.Configuration;
 //builder.WebHost.UseUrls("http://localhost:5226");
 
 // Add services to the container.
-
+builder.Services.AddHttpClient();
 services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(c =>
@@ -53,6 +53,7 @@ services.AddScoped<IUserService, UserService>();
 services.AddScoped<IClientService, ClientService>();
 services.AddScoped<IRoleMappingService, RoleMappingService>();
 services.AddScoped<IRoleService, RoleService>();
+services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
