@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using UserManagement.Application.Dtos.Role;
+using UserManagement.Application.Models;
 
 public class RoleService : IRoleService
 {
@@ -54,7 +55,7 @@ public class RoleService : IRoleService
         return null;
     }
 
-    public async Task<bool> CreateClientRoleAsync(RoleRequestDto roleRequest)
+    public async Task<bool> CreateClientRoleAsync(RoleRequestDto roleRequest,bool isCompositeRole=false)
     {
         string accessToken = await GetAccessTokenAsync();
         string clientId = await GetClientIdAsync();
@@ -65,11 +66,62 @@ public class RoleService : IRoleService
         var req = new RestRequest()
             .AddHeader("Authorization", $"Bearer {accessToken}")
             .AddHeader("Content-Type", "application/json")
-            .AddJsonBody(roleRequest);
+            .AddJsonBody(new
+            {
+                name = roleRequest.Name,
+                description = roleRequest.Description,
+                composite = isCompositeRole,
+                clientRole = true
+            });
 
+      
+
+        // Step 1: Create the Composite Role in Keycloak
         var response = await client.ExecutePostAsync(req);
-        return response.StatusCode == HttpStatusCode.Created;
+        if (response.StatusCode != HttpStatusCode.Created)
+        {
+            Console.WriteLine($"Failed to create role: {response.Content}");
+            return false;
+        }
+        if (!isCompositeRole)
+        {
+            return true;
+        }
+
+        // Step 2: Assign Child Roles to the Composite Role
+        if (roleRequest.CompositeRoles != null && roleRequest.CompositeRoles.Count > 0)
+        {
+            string assignCompositeUrl = $"{createRoleUrl}/{roleRequest.Name}/composites";
+            var compositeRolesPayload = new List<object>();
+
+            foreach (var childRole in roleRequest.CompositeRoles)
+            {
+                compositeRolesPayload.Add(new
+                {
+                    id = childRole.Id,
+                    name = childRole.Name,
+                    clientRole = isCompositeRole,
+                    containerId = clientId
+                });
+            }
+
+            var compositeClient = new RestClient(assignCompositeUrl);
+            var compositeReq = new RestRequest()
+                .AddHeader("Authorization", $"Bearer {accessToken}")
+                .AddHeader("Content-Type", "application/json")
+                .AddJsonBody(JsonConvert.SerializeObject(compositeRolesPayload));
+
+            var compositeResponse = await compositeClient.ExecutePostAsync(compositeReq);
+            if (compositeResponse.StatusCode != HttpStatusCode.NoContent)
+            {
+                Console.WriteLine($"Failed to assign composite roles: {compositeResponse.Content}");
+                return false;
+            }
+        }
+
+        return true;
     }
+
 
 
     public async Task<List<RoleResponse>> GetClientRolesAsync()
@@ -88,7 +140,7 @@ public class RoleService : IRoleService
         var roles = JsonConvert.DeserializeObject<List<RoleResponse>>(response.Content);
         return roles;
     }
-    public async Task<RoleResponse> GetClientRoleByIdAsync(string roleId)
+    public async Task<RoleResponseDto> GetClientRoleByIdAsync(string roleId)
     {
         if (string.IsNullOrEmpty(roleId))
             throw new Exception("Role ID is required.");
@@ -104,7 +156,7 @@ public class RoleService : IRoleService
         var response = await client.ExecuteGetAsync(req);
         if (!response.IsSuccessful) throw new Exception("Failed to fetch roles");
 
-        var roles = JsonConvert.DeserializeObject<List<RoleResponse>>(response.Content);
+        var roles = JsonConvert.DeserializeObject<List<RoleResponseDto>>(response.Content);
 
         var role = roles.FirstOrDefault(r => r.Id == roleId);
         if (role == null) throw new Exception("Role not found");
@@ -155,41 +207,43 @@ public class RoleService : IRoleService
     }
 
 
-    public async Task<bool> UpdateClientRoleAsync(UpdateRoleRequestDto updateRoleRequest)
-    {
-        if (string.IsNullOrEmpty(updateRoleRequest.Id))
-            throw new Exception("Role ID is required.");
+    //public async Task<bool> UpdateClientRoleAsync(UpdateRoleRequestDto updateRoleRequest)
+    //{
+    //    if (string.IsNullOrEmpty(updateRoleRequest.Id))
+    //        throw new Exception("Role ID is required.");
 
-        if (string.IsNullOrEmpty(updateRoleRequest.NewRoleName))
-            throw new Exception("New role name is required.");
+    //    if (string.IsNullOrEmpty(updateRoleRequest.NewRoleName))
+    //        throw new Exception("New role name is required.");
 
-        string accessToken = await GetAccessTokenAsync();
-        string clientId = await GetClientIdAsync();
+    //    string accessToken = await GetAccessTokenAsync();
+    //    string clientId = await GetClientIdAsync();
 
-        // Fetch existing role details (to make sure it exists)
-        var existingRole = await GetClientRoleByIdAsync(updateRoleRequest.Id);
-        if (existingRole == null)
-            throw new Exception("Role not found in Keycloak.");
+    //    // Fetch existing role details (to make sure it exists)
+    //    var existingRole = await GetClientRoleByIdAsync(updateRoleRequest.Id);
+    //    if (existingRole == null)
+    //        throw new Exception("Role not found in Keycloak.");
 
-        // Prepare the update request
-        var updateRoleUrl = $"{_keycloakOptions.ServerUrl}/admin/realms/{_keycloakOptions.Realm}/clients/{clientId}/roles";
+    //    // Prepare the update request
+    //    var updateRoleUrl = $"{_keycloakOptions.ServerUrl}/admin/realms/{_keycloakOptions.Realm}/clients/{clientId}/roles/{existingRole.Name}";
 
-        var client = new RestClient(updateRoleUrl);
-        var req = new RestRequest()
-            .AddHeader("Authorization", $"Bearer {accessToken}")
-            .AddHeader("Content-Type", "application/json")
-            .AddJsonBody(new
-            {
-                id=updateRoleRequest.Id,
-                name = updateRoleRequest.NewRoleName,  // Update only necessary fields
-                description = updateRoleRequest.Description
-            });
+    //    var client = new RestClient(updateRoleUrl);
+    //    var req = new RestRequest()
+    //        .AddHeader("Authorization", $"Bearer {accessToken}")
+    //        .AddHeader("Content-Type", "application/json")
+    //        .AddJsonBody(new
+    //        {
+    //            id=updateRoleRequest.Id,
+    //            name = updateRoleRequest.NewRoleName,  // Update only necessary fields
+    //            description = updateRoleRequest.Description,
+    //            composite = existingRole.Composite,
+    //            clientRole = existingRole.ClientRole
+    //        });
 
-        var response = await client.ExecutePutAsync(req);
+    //    var response = await client.ExecutePutAsync(req);
 
-        // Return true if updated successfully, false otherwise
-        return response.StatusCode == HttpStatusCode.NoContent;
-    }
+    //    // Return true if updated successfully, false otherwise
+    //    return response.StatusCode == HttpStatusCode.NoContent;
+    //}
 
     public async Task<bool> DeleteClientRoleAsync(string roleId)
     {

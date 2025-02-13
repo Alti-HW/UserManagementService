@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using UserManagement.Application.Dtos;
+using UserManagement.Application.Dtos.Permission;
+using UserManagement.Application.Dtos.Role;
 using UserManagement.Application.Extensions;
 using UserManagement.Application.Models;
 
@@ -20,5 +22,17 @@ public class AutoMapperProfile : Profile
         CreateMap<RoleRepresentation, RoleRepresentationDto>().ReverseMap();
         CreateMap<ClientMappingsRepresentation, ClientMappingsRepresentationDto>().ReverseMap();
         CreateMap<RealmMappingsResponse, RealmMappingsResponseDto>().ReverseMap();
+        CreateMap<RoleRequestDto, PermissionRequestDto>().ReverseMap();
+        CreateMap<RoleResponseDto, PermissionResponseDto>().ReverseMap();
+        CreateMap<RoleResponse, RoleResponseDto>().ReverseMap();
+        CreateMap<RoleResponse, PermissionResponseDto>().ReverseMap();
+        // Ensure Lists are mapped correctly
+        CreateMap<List<RoleResponseDto>, List<PermissionResponseDto>>()
+            .ConvertUsing((src, dest, context) => src.Select(role => context.Mapper.Map<PermissionResponseDto>(role)).ToList());
+
+        CreateMap<List<RoleResponse>,List<RoleResponseDto>>()
+     .ConvertUsing((src, dest, context) => src.Select(role => context.Mapper.Map<RoleResponseDto>(role)).ToList());
+        CreateMap<List<RoleResponse>, List<PermissionResponseDto>>()
+ .ConvertUsing((src, dest, context) => src.Select(role => context.Mapper.Map<PermissionResponseDto>(role)).ToList());
     }
 }

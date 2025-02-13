@@ -54,6 +54,7 @@ services.AddScoped<IClientService, ClientService>();
 services.AddScoped<IRoleMappingService, RoleMappingService>();
 services.AddScoped<IRoleService, RoleService>();
 services.AddScoped<IAuthService, AuthService>();
+services.AddScoped<IPermissionService, PermissionService>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();

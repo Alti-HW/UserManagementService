@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Application.Dtos;
 using UserManagement.Application.Dtos.Role;
@@ -9,50 +11,84 @@ using UserManagement.Application.Dtos.Role;
 public class RoleController : ControllerBase
 {
     private readonly IRoleService _roleService;
+    private readonly IMapper _mapper;
 
-    public RoleController(IRoleService roleService)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RoleController"/> class.
+    /// </summary>
+    /// <param name="roleService">Service to handle role operations.</param>
+    /// <param name="mapper">AutoMapper instance for mapping DTOs.</param>
+    public RoleController(IRoleService roleService, IMapper mapper)
     {
         _roleService = roleService;
+        _mapper = mapper;
     }
 
+    /// <summary>
+    /// Creates a new client role.
+    /// </summary>
+    /// <param name="roleRequest">The role request DTO.</param>
+    /// <returns>Returns a success or failure response.</returns>
     [HttpPost("create")]
     public async Task<IActionResult> CreateRole([FromBody] RoleRequestDto roleRequest)
     {
-        var result = await _roleService.CreateClientRoleAsync(roleRequest);
+        var result = await _roleService.CreateClientRoleAsync(roleRequest, true);
         return Ok(new ApiResponse1<bool>(result, result ? "Role created successfully" : "Failed to create role", result));
     }
 
+    /// <summary>
+    /// Retrieves a list of all client roles.
+    /// </summary>
+    /// <returns>Returns a list of client roles.</returns>
     [HttpGet("list")]
     public async Task<IActionResult> GetRoles()
     {
         var roles = await _roleService.GetClientRolesAsync();
-        return Ok(new ApiResponse1<List<RoleResponse>>(roles != null, roles != null ? "Roles fetched successfully" : "Failed to fetch roles", roles));
+
+        // Check if roles are null or empty
+        if (roles == null || !roles.Any())
+        {
+            return Ok(new ApiResponse1<List<RoleResponseDto>>(false, "Failed to fetch roles", new List<RoleResponseDto>()));
+        }
+
+        // Filter composite roles
+        var filteredRoles = roles.Where(x => x.Composite).ToList();
+
+        // Map filtered roles to RoleResponseDto using AutoMapper
+        var mappedRoles = _mapper.Map<List<RoleResponseDto>>(filteredRoles);
+
+        // Return the response with mapped roles
+        return Ok(new ApiResponse1<List<RoleResponseDto>>(true, "Roles fetched successfully", mappedRoles));
     }
+
+    /// <summary>
+    /// Retrieves a client role by its ID.
+    /// </summary>
+    /// <param name="roleId">The ID of the role.</param>
+    /// <returns>Returns the role details.</returns>
     [HttpGet("get")]
     public async Task<IActionResult> GetRoleById([FromQuery] string roleId)
     {
         var role = await _roleService.GetClientRoleByIdAsync(roleId);
-        return Ok(new ApiResponse1<RoleResponse>(
+
+        return Ok(new ApiResponse1<RoleResponseDto>(
             role != null,
             role != null ? "Role details retrieved successfully" : "Role not found",
             role));
     }
 
-    [HttpPut("update")]
-    public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleRequestDto updateRoleRequest)
-    {
-        var result = await _roleService.UpdateClientRoleAsync(updateRoleRequest);
-        return result
-            ? Ok(new ApiResponse1<bool>(true, "Role updated successfully", true))
-            : BadRequest(new ApiResponse1<bool>(false, "Failed to update role", false));
-    }
-
-
+    /// <summary>
+    /// Deletes a client role by its ID.
+    /// </summary>
+    /// <param name="roleId">The ID of the role.</param>
+    /// <returns>Returns a success or failure response.</returns>
     [HttpDelete("delete")]
     public async Task<IActionResult> DeleteRoleById([FromQuery] string roleId)
     {
         if (string.IsNullOrEmpty(roleId))
+        {
             return BadRequest(new ApiResponse1<bool>(false, "Role ID is required.", false));
+        }
 
         try
         {
@@ -66,5 +102,4 @@ public class RoleController : ControllerBase
             return BadRequest(new ApiResponse1<bool>(false, ex.Message, false));
         }
     }
-
 }
