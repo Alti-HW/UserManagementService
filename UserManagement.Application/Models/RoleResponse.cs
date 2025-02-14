@@ -14,5 +14,7 @@ namespace UserManagement.Application.Models
         public bool Composite { get; set; }
         public bool ClientRole { get; set; }
         public string ContainerId { get; set; }
+
+        public List<RoleResponse> CompositeRoles { get; set; } = new List<RoleResponse>();
     }
 }

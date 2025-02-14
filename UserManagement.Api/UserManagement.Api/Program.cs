@@ -1,6 +1,7 @@
 using System.Reflection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using UserManagement.Application.Configuration;
 using UserManagement.Application.Extensions;

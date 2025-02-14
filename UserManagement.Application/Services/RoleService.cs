@@ -138,8 +138,29 @@ public class RoleService : IRoleService
         if (!response.IsSuccessful) return null;
 
         var roles = JsonConvert.DeserializeObject<List<RoleResponse>>(response.Content);
+
+        // Fetch composite roles for each role
+        foreach (var role in roles)
+        {
+            role.CompositeRoles = await GetCompositeRolesAsync(clientId, role.Name, accessToken);
+        }
+
         return roles;
     }
+    private async Task<List<RoleResponse>> GetCompositeRolesAsync(string clientId, string roleName, string accessToken)
+    {
+        var compositeRolesUrl = $"{_keycloakOptions.ServerUrl}/admin/realms/{_keycloakOptions.Realm}/clients/{clientId}/roles/{roleName}/composites";
+
+        var client = new RestClient(compositeRolesUrl);
+        var req = new RestRequest().AddHeader("Authorization", $"Bearer {accessToken}");
+
+        var response = await client.ExecuteGetAsync(req);
+        if (!response.IsSuccessful) return new List<RoleResponse>();
+
+        return JsonConvert.DeserializeObject<List<RoleResponse>>(response.Content);
+    }
+
+
     public async Task<RoleResponseDto> GetClientRoleByIdAsync(string roleId)
     {
         if (string.IsNullOrEmpty(roleId))

@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UserManagement.Application.Constants;
 using UserManagement.Application.Dtos;
+using UserManagement.Application.Dtos.User;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Params;
+using UserManagement.Application.Services;
 
 namespace UserManagement.Api.Controllers;
 
@@ -225,4 +227,20 @@ public class UsersController : ControllerBase
             Message = ResponseMessages.RecordDeleted.Replace("{Record}", "User")
         });
     }
+
+  
+
+
+    [HttpPost("invite")]
+    public async Task<IActionResult> InviteUser([FromBody] InviteUserDto inviteUserDto)
+    {
+        var response = await userService.InviteUserAsync(inviteUserDto);
+
+        if (!response.Success)
+            return BadRequest(response);
+
+        return Ok(response);
+    }
+
+
 }
