@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Ocsp;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -115,6 +116,66 @@ public class RoleService : IRoleService
             if (compositeResponse.StatusCode != HttpStatusCode.NoContent)
             {
                 Console.WriteLine($"Failed to assign composite roles: {compositeResponse.Content}");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public async Task<bool> UpdateCompositeRolesAsync(string roleId, List<RolePermission> compositeRoles)
+    {
+        string accessToken = await GetAccessTokenAsync();
+        string clientId = await GetClientIdAsync();
+        string baseUrl = $"{_keycloakOptions.ServerUrl}/admin/realms/{_keycloakOptions.Realm}/clients/{clientId}/roles/Building Owner/composites";
+
+        var client = new RestClient();
+
+        // Step 1: Fetch currently assigned composite roles
+        var getReq = new RestRequest(baseUrl, Method.Get)
+            .AddHeader("Authorization", $"Bearer {accessToken}");
+
+        var getResponse = await client.ExecuteGetAsync(getReq);
+        if (getResponse.StatusCode != HttpStatusCode.OK)
+        {
+            Console.WriteLine($"Failed to fetch current composite roles: {getResponse.Content}");
+            return false;
+        }
+
+        var currentCompositeRoles = new List<ClientRoleDto>();
+
+        // Determine roles to add and remove
+        var rolesToAdd = compositeRoles.Where(r => !currentCompositeRoles.Any(c => c.Id == r.Id)).ToList();
+        var rolesToRemove = currentCompositeRoles.Where(c => !compositeRoles.Any(r => r.Id == c.Id)).ToList();
+
+        // Step 2: Assign new composite roles
+        if (rolesToAdd.Count > 0)
+        {
+            var addReq = new RestRequest(baseUrl, Method.Post)
+                .AddHeader("Authorization", $"Bearer {accessToken}")
+                .AddHeader("Content-Type", "application/json")
+                .AddJsonBody(JsonConvert.SerializeObject(rolesToAdd));
+
+            var addResponse = await client.ExecuteAsync(addReq);
+            if (addResponse.StatusCode != HttpStatusCode.NoContent)
+            {
+                Console.WriteLine($"Failed to assign composite roles: {addResponse.Content}");
+                return false;
+            }
+        }
+
+        // Step 3: Remove composite roles not in the input list
+        if (rolesToRemove.Count > 0)
+        {
+            var removeReq = new RestRequest(baseUrl, Method.Delete)
+                .AddHeader("Authorization", $"Bearer {accessToken}")
+                .AddHeader("Content-Type", "application/json")
+                .AddJsonBody(JsonConvert.SerializeObject(rolesToRemove));
+
+            var removeResponse = await client.ExecuteAsync(removeReq);
+            if (removeResponse.StatusCode != HttpStatusCode.NoContent)
+            {
+                Console.WriteLine($"Failed to remove composite roles: {removeResponse.Content}");
                 return false;
             }
         }

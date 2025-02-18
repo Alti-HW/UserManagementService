@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UserManagement.Application.Constants;
 using UserManagement.Application.Dtos;
@@ -11,6 +12,7 @@ namespace UserManagement.Api.Controllers;
 /// </summary>
 [Produces("application/json")]
 [Route("api/[controller]")]
+[Authorize]
 [ApiController]
 public class RollMappingController : ControllerBase
 {

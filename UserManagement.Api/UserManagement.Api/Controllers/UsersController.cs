@@ -1,4 +1,5 @@
 ﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UserManagement.Application.Constants;
@@ -15,6 +16,7 @@ namespace UserManagement.Api.Controllers;
 /// </summary>
 [Produces("application/json")]
 [Route("api/[controller]")]
+[Authorize]
 [ApiController]
 public class UsersController : ControllerBase
 {

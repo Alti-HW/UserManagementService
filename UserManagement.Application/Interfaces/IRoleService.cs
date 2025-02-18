@@ -10,4 +10,10 @@ public interface IRoleService
     //Task<bool> UpdateClientRoleAsync(UpdateRoleRequestDto updateRoleRequest);
     Task<bool> DeleteClientRoleAsync(string roleName);
     Task<RoleResponseDto> GetClientRoleByIdAsync(string roleId);
+    Task<bool> UpdateCompositeRolesAsync(string roleId, List<RolePermission> compositeRoles);
 }
+public class RolePermission
+{
+    public string Id { get; set; }
+}
+

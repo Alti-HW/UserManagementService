@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using UserManagement.Application.Configuration;
 using UserManagement.Application.Dtos.KeyCloak;
-using UserManagement.Application.Dtos;
 using UserManagement.Application.Interfaces;
+using System.Collections.Generic;
 
 namespace UserManagement.Application.Services
 {
@@ -20,7 +20,7 @@ namespace UserManagement.Application.Services
             _keycloakConfig = keycloakOptions.Value;
         }
 
-        public async Task<string> LoginAsync(string username, string password)
+        public async Task<KeycloakTokenResponseDto> LoginAsync(string username, string password)
         {
             var client = _httpClientFactory.CreateClient();
             var tokenUrl = $"{_keycloakConfig.ServerUrl}/realms/{_keycloakConfig.Realm}/protocol/openid-connect/token";
@@ -44,7 +44,23 @@ namespace UserManagement.Application.Services
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var tokenResponse = System.Text.Json.JsonSerializer.Deserialize<KeycloakTokenResponseDto>(responseBody, options);
 
-            return tokenResponse?.Access_Token;
+            return tokenResponse; // Returns both access and refresh tokens
+        }
+
+        public async Task<bool> LogoutAsync(string refreshToken)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var logoutUrl = $"{_keycloakConfig.ServerUrl}/realms/{_keycloakConfig.Realm}/protocol/openid-connect/logout";
+
+            var content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("client_id", _keycloakConfig.ClientId),
+                new KeyValuePair<string, string>("client_secret", _keycloakConfig.ClientSecret),
+                new KeyValuePair<string, string>("refresh_token", refreshToken)
+            });
+
+            var response = await client.PostAsync(logoutUrl, content);
+            return response.IsSuccessStatusCode;
         }
     }
 }

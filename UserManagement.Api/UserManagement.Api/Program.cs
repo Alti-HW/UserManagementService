@@ -1,7 +1,9 @@
 using System.Reflection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using UserManagement.Application.Configuration;
 using UserManagement.Application.Extensions;
@@ -28,9 +30,32 @@ services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "User Management API",
     });
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath);
+
+    // Enable JWT Authentication in Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT Bearer token in the format: Bearer {your-token}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
 });
 // Add CORS policy
 builder.Services.AddCors(options =>
@@ -64,6 +89,24 @@ builder.Services.AddValidatorsFromAssemblyContaining<UserRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UserRoleRepresentationRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<RoleRepresentationRequestValidator>();
 
+var keycloakConfig = configuration.GetSection(KeyCloakConfiguration.Section).Get<KeyCloakConfiguration>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = $"{keycloakConfig.ServerUrl}/realms/{keycloakConfig.Realm}";
+        options.Audience = keycloakConfig.ClientId;
+        options.RequireHttpsMetadata = false; // Set to true in production
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidAudience = keycloakConfig.ClientId
+        };
+    });
+
 var app = builder.Build();
 // Enable CORS
 app.UseCors("AllowAll");
@@ -80,6 +123,7 @@ app.UseGlobalExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

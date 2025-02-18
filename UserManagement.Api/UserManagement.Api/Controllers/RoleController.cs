@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using UserManagement.Application.Dtos.Role;
 
 [ApiController]
 [Route("api/roles")]
+[Authorize]
 public class RoleController : ControllerBase
 {
     private readonly IRoleService _roleService;
@@ -102,4 +104,25 @@ public class RoleController : ControllerBase
             return BadRequest(new ApiResponse1<bool>(false, ex.Message, false));
         }
     }
+    [HttpPost("update-rolepermissions")]
+    public async Task<IActionResult> UpdateCompositeRoles([FromBody] UpdateCompositeRolesDto request)
+    {
+        if (request == null || string.IsNullOrEmpty(request.RoleId))
+        {
+            return BadRequest(new ApiResponse1<bool>(false, "Invalid request: RoleId is required", false));
+        }
+
+        var result = await _roleService.UpdateCompositeRolesAsync(request.RoleId, request.RolePermissions);
+
+        return result
+            ? Ok(new ApiResponse1<bool>(true, "Composite roles updated successfully", true))
+            : StatusCode(500, new ApiResponse1<bool>(false, "Failed to update composite roles", false));
+    }
 }
+public class UpdateCompositeRolesDto
+{
+    public string RoleId { get; set; }  // Role ID for which composites should be updated
+    public List<RolePermission> RolePermissions { get; set; } = new List<RolePermission>(); // List of assigned composite roles
+}
+
+

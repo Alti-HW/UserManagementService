@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UserManagement.Application.Dtos;
@@ -7,6 +8,7 @@ using UserManagement.Application.Interfaces;
 
 [ApiController]
 [Route("api/permissions")]
+[Authorize]
 public class PermissionController : ControllerBase
 {
     private readonly IPermissionService _permissionService;
