@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using UserManagement.Application.Dtos;
 using UserManagement.Application.Dtos.Role;
 using UserManagement.Application.Models;
 
@@ -56,73 +57,96 @@ public class RoleService : IRoleService
         return null;
     }
 
-    public async Task<bool> CreateClientRoleAsync(RoleRequestDto roleRequest,bool isCompositeRole=false)
+    public async Task<ApiResponse1<bool>> CreateClientRoleAsync(RoleRequestDto roleRequest, bool isCompositeRole = false)
     {
-        string accessToken = await GetAccessTokenAsync();
-        string clientId = await GetClientIdAsync();
-
-        var createRoleUrl = $"{_keycloakOptions.ServerUrl}/admin/realms/{_keycloakOptions.Realm}/clients/{clientId}/roles";
-
-        var client = new RestClient(createRoleUrl);
-        var req = new RestRequest()
-            .AddHeader("Authorization", $"Bearer {accessToken}")
-            .AddHeader("Content-Type", "application/json")
-            .AddJsonBody(new
-            {
-                name = roleRequest.Name,
-                description = roleRequest.Description,
-                composite = isCompositeRole,
-                clientRole = true
-            });
-
-      
-
-        // Step 1: Create the Composite Role in Keycloak
-        var response = await client.ExecutePostAsync(req);
-        if (response.StatusCode != HttpStatusCode.Created)
+        try
         {
-            Console.WriteLine($"Failed to create role: {response.Content}");
-            return false;
-        }
-        if (!isCompositeRole)
-        {
-            return true;
-        }
+            string accessToken = await GetAccessTokenAsync();
+            string clientId = await GetClientIdAsync();
+            string createRoleUrl = $"{_keycloakOptions.ServerUrl}/admin/realms/{_keycloakOptions.Realm}/clients/{clientId}/roles";
 
-        // Step 2: Assign Child Roles to the Composite Role
-        if (roleRequest.CompositeRoles != null && roleRequest.CompositeRoles.Count > 0)
-        {
-            string assignCompositeUrl = $"{createRoleUrl}/{roleRequest.Name}/composites";
-            var compositeRolesPayload = new List<object>();
-
-            foreach (var childRole in roleRequest.CompositeRoles)
-            {
-                compositeRolesPayload.Add(new
-                {
-                    id = childRole.Id,
-                    name = childRole.Name,
-                    clientRole = isCompositeRole,
-                    containerId = clientId
-                });
-            }
-
-            var compositeClient = new RestClient(assignCompositeUrl);
-            var compositeReq = new RestRequest()
+            var client = new RestClient(createRoleUrl);
+            var req = new RestRequest()
                 .AddHeader("Authorization", $"Bearer {accessToken}")
                 .AddHeader("Content-Type", "application/json")
-                .AddJsonBody(JsonConvert.SerializeObject(compositeRolesPayload));
+                .AddJsonBody(new
+                {
+                    name = roleRequest.Name,
+                    description = roleRequest.Description,
+                    composite = isCompositeRole,
+                    clientRole = true
+                });
 
-            var compositeResponse = await compositeClient.ExecutePostAsync(compositeReq);
-            if (compositeResponse.StatusCode != HttpStatusCode.NoContent)
+            // Step 1: Create the Role in Keycloak
+            var response = await client.ExecutePostAsync(req);
+
+            var dynamicPermissionOrRole = "Permission";
+
+            if(isCompositeRole)
             {
-                Console.WriteLine($"Failed to assign composite roles: {compositeResponse.Content}");
-                return false;
+                dynamicPermissionOrRole = "Role";
             }
+
+            if (response.StatusCode != HttpStatusCode.Created)
+            {
+                return new ApiResponse1<bool>(
+                    false,
+                    $"Failed to create {dynamicPermissionOrRole}: {response.Content}",
+                    false
+                );
+            }
+
+            // If the role is not composite, return success
+            if (!isCompositeRole)
+            {
+                return new ApiResponse1<bool>(true, "created successfully", true);
+            }
+
+            // Step 2: Assign Child Roles to the Composite Role (if any)
+            if (roleRequest.CompositeRoles != null && roleRequest.CompositeRoles.Count > 0)
+            {
+                string assignCompositeUrl = $"{createRoleUrl}/{roleRequest.Name}/composites";
+                var compositeRolesPayload = new List<object>();
+
+                foreach (var childRole in roleRequest.CompositeRoles)
+                {
+                    compositeRolesPayload.Add(new
+                    {
+                        id = childRole.Id,
+                        name = childRole.Name,
+                        clientRole = isCompositeRole,
+                        containerId = clientId
+                    });
+                }
+
+                var compositeClient = new RestClient(assignCompositeUrl);
+                var compositeReq = new RestRequest()
+                    .AddHeader("Authorization", $"Bearer {accessToken}")
+                    .AddHeader("Content-Type", "application/json")
+                    .AddJsonBody(JsonConvert.SerializeObject(compositeRolesPayload));
+
+                var compositeResponse = await compositeClient.ExecutePostAsync(compositeReq);
+                if (compositeResponse.StatusCode != HttpStatusCode.NoContent)
+                {
+                    return new ApiResponse1<bool>(
+                        false,
+                        $"Failed to assign permissions: {compositeResponse.Content}",
+                        false
+                    );
+                }
+            }
+
+            return new ApiResponse1<bool>(true, "Role created successfully", true);
         }
-
-        return true;
+        catch (Exception ex)
+        {
+            return new ApiResponse1<bool>(
+                false,
+                $"An error occurred: {ex.Message}",
+                false
+            );
+        }
     }
-
     public async Task<bool> UpdateCompositeRolesAsync(string roleId, List<RolePermission> compositeRoles)
     {
         string accessToken = await GetAccessTokenAsync();

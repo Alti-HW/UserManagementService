@@ -31,7 +31,7 @@ public class PermissionController : ControllerBase
     public async Task<IActionResult> CreatePermission([FromBody] PermissionRequestDto permissionRequest)
     {
         var result = await _permissionService.CreatePermissionAsync(permissionRequest);
-        return Ok(new ApiResponse1<bool>(result, result ? "Permission created successfully" : "Failed to create permission", result));
+        return Ok(result);
     }
 
     /// <summary>

@@ -24,7 +24,7 @@ namespace UserManagement.Application.Services
         }
 
 
-        public Task<bool> CreatePermissionAsync(PermissionRequestDto permissionRequest)
+        public Task<ApiResponse1<bool>> CreatePermissionAsync(PermissionRequestDto permissionRequest)
         {
 
             var request= _mapper.Map<RoleRequestDto>(permissionRequest);

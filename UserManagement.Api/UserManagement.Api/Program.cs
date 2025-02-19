@@ -107,6 +107,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+
+
 var app = builder.Build();
 // Enable CORS
 app.UseCors("AllowAll");

@@ -35,7 +35,7 @@ public class RoleController : ControllerBase
     public async Task<IActionResult> CreateRole([FromBody] RoleRequestDto roleRequest)
     {
         var result = await _roleService.CreateClientRoleAsync(roleRequest, true);
-        return Ok(new ApiResponse1<bool>(result, result ? "Role created successfully" : "Failed to create role", result));
+        return Ok(result);
     }
 
     /// <summary>
