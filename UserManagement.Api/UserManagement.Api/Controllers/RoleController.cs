@@ -9,7 +9,7 @@ using UserManagement.Application.Dtos.Role;
 
 [ApiController]
 [Route("api/roles")]
-//[Authorize]
+[Authorize]
 public class RoleController : ControllerBase
 {
     private readonly IRoleService _roleService;
