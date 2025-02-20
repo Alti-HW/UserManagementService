@@ -9,7 +9,7 @@ using UserManagement.Application.Dtos.Role;
 
 [ApiController]
 [Route("api/roles")]
-[Authorize]
+//[Authorize]
 public class RoleController : ControllerBase
 {
     private readonly IRoleService _roleService;
@@ -105,24 +105,19 @@ public class RoleController : ControllerBase
         }
     }
     [HttpPost("update-rolepermissions")]
-    public async Task<IActionResult> UpdateCompositeRoles([FromBody] UpdateCompositeRolesDto request)
+    public async Task<IActionResult> UpdateCompositeRoles([FromBody] RoleRequestDto request)
     {
-        if (request == null || string.IsNullOrEmpty(request.RoleId))
+        if (request == null || string.IsNullOrEmpty(request.Name))
         {
             return BadRequest(new ApiResponse1<bool>(false, "Invalid request: RoleId is required", false));
         }
 
-        var result = await _roleService.UpdateCompositeRolesAsync(request.RoleId, request.RolePermissions);
+        var result = await _roleService.UpdateCompositeRolesAsync(request);
 
         return result
-            ? Ok(new ApiResponse1<bool>(true, "Composite roles updated successfully", true))
-            : StatusCode(500, new ApiResponse1<bool>(false, "Failed to update composite roles", false));
+            ? Ok(new ApiResponse1<bool>(true, "Permissions updated successfully", true))
+            : StatusCode(500, new ApiResponse1<bool>(false, "Failed to update Role Permissions", false));
     }
-}
-public class UpdateCompositeRolesDto
-{
-    public string RoleId { get; set; }  // Role ID for which composites should be updated
-    public List<RolePermission> RolePermissions { get; set; } = new List<RolePermission>(); // List of assigned composite roles
 }
 
 

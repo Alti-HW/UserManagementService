@@ -147,66 +147,88 @@ public class RoleService : IRoleService
             );
         }
     }
-    public async Task<bool> UpdateCompositeRolesAsync(string roleId, List<RolePermission> compositeRoles)
+    public async Task<bool> UpdateCompositeRolesAsync(RoleRequestDto updateRequest)
     {
-        string accessToken = await GetAccessTokenAsync();
-        string clientId = await GetClientIdAsync();
-        string baseUrl = $"{_keycloakOptions.ServerUrl}/admin/realms/{_keycloakOptions.Realm}/clients/{clientId}/roles/Building Owner/composites";
-
-        var client = new RestClient();
-
-        // Step 1: Fetch currently assigned composite roles
-        var getReq = new RestRequest(baseUrl, Method.Get)
-            .AddHeader("Authorization", $"Bearer {accessToken}");
-
-        var getResponse = await client.ExecuteGetAsync(getReq);
-        if (getResponse.StatusCode != HttpStatusCode.OK)
+        try
         {
-            Console.WriteLine($"Failed to fetch current composite roles: {getResponse.Content}");
+            string accessToken = await GetAccessTokenAsync();
+            string clientId = await GetClientIdAsync();
+            string baseUrl = $"{_keycloakOptions.ServerUrl}/admin/realms/{_keycloakOptions.Realm}/clients/{clientId}/roles/{updateRequest.Name}/composites";
+
+            var client = new RestClient();
+
+            // Step 1: Fetch currently assigned composite roles
+            var getReq = new RestRequest(baseUrl, Method.Get)
+                .AddHeader("Authorization", $"Bearer {accessToken}");
+
+            var getResponse = await client.ExecuteAsync(getReq);
+            if (getResponse.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine($"Error fetching current permissions: {getResponse.Content}");
+                return false;
+            }
+
+            var currentCompositeRoles = JsonConvert.DeserializeObject<List<ClientRoleDto>>(getResponse.Content);
+            if (currentCompositeRoles == null)
+            {
+                Console.WriteLine("Failed to parse current permissions.");
+                return false;
+            }
+
+            // Step 2: Determine roles to add and remove
+            var rolesToAdd = updateRequest.CompositeRoles
+                .Where(r => !currentCompositeRoles.Any(c => c.Id == r.Id))
+                .Select(r => new { id = r.Id, name = r.Name }) // Ensure correct JSON format
+                .ToList();
+
+            var rolesToRemove = currentCompositeRoles
+                .Where(c => !updateRequest.CompositeRoles.Any(r => r.Id == c.Id))
+                .Select(c => new { id = c.Id, name = c.Name }) // Ensure correct JSON format
+                .ToList();
+
+            Console.WriteLine($"Roles to Add: {JsonConvert.SerializeObject(rolesToAdd, Formatting.Indented)}");
+            Console.WriteLine($"Roles to Remove: {JsonConvert.SerializeObject(rolesToRemove, Formatting.Indented)}");
+
+            // Step 3: Assign new composite roles
+            if (rolesToAdd.Count > 0)
+            {
+                var addReq = new RestRequest(baseUrl, Method.Post)
+                    .AddHeader("Authorization", $"Bearer {accessToken}")
+                    .AddHeader("Content-Type", "application/json")
+                    .AddJsonBody(JsonConvert.SerializeObject(rolesToAdd));
+
+                var addResponse = await client.ExecuteAsync(addReq);
+                if (addResponse.StatusCode != HttpStatusCode.NoContent)
+                {
+                    Console.WriteLine($"Error adding composite roles: {addResponse.Content}");
+                    return false;
+                }
+            }
+
+            // Step 4: Remove composite roles not in the input list
+            if (rolesToRemove.Count > 0)
+            {
+                var removeReq = new RestRequest(baseUrl, Method.Delete)
+                    .AddHeader("Authorization", $"Bearer {accessToken}")
+                    .AddHeader("Content-Type", "application/json")
+                    .AddJsonBody(JsonConvert.SerializeObject(rolesToRemove));
+
+                var removeResponse = await client.ExecuteAsync(removeReq);
+                if (removeResponse.StatusCode != HttpStatusCode.NoContent)
+                {
+                    Console.WriteLine($"Error removing composite roles: {removeResponse.Content}");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception in UpdateCompositeRolesAsync: {ex.Message}");
             return false;
         }
-
-        var currentCompositeRoles = new List<ClientRoleDto>();
-
-        // Determine roles to add and remove
-        var rolesToAdd = compositeRoles.Where(r => !currentCompositeRoles.Any(c => c.Id == r.Id)).ToList();
-        var rolesToRemove = currentCompositeRoles.Where(c => !compositeRoles.Any(r => r.Id == c.Id)).ToList();
-
-        // Step 2: Assign new composite roles
-        if (rolesToAdd.Count > 0)
-        {
-            var addReq = new RestRequest(baseUrl, Method.Post)
-                .AddHeader("Authorization", $"Bearer {accessToken}")
-                .AddHeader("Content-Type", "application/json")
-                .AddJsonBody(JsonConvert.SerializeObject(rolesToAdd));
-
-            var addResponse = await client.ExecuteAsync(addReq);
-            if (addResponse.StatusCode != HttpStatusCode.NoContent)
-            {
-                Console.WriteLine($"Failed to assign composite roles: {addResponse.Content}");
-                return false;
-            }
-        }
-
-        // Step 3: Remove composite roles not in the input list
-        if (rolesToRemove.Count > 0)
-        {
-            var removeReq = new RestRequest(baseUrl, Method.Delete)
-                .AddHeader("Authorization", $"Bearer {accessToken}")
-                .AddHeader("Content-Type", "application/json")
-                .AddJsonBody(JsonConvert.SerializeObject(rolesToRemove));
-
-            var removeResponse = await client.ExecuteAsync(removeReq);
-            if (removeResponse.StatusCode != HttpStatusCode.NoContent)
-            {
-                Console.WriteLine($"Failed to remove composite roles: {removeResponse.Content}");
-                return false;
-            }
-        }
-
-        return true;
     }
-
 
 
     public async Task<List<RoleResponse>> GetClientRolesAsync()
