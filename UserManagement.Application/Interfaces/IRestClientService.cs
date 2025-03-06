@@ -10,6 +10,8 @@ public interface IRestClientService
 
     Task<RestResponse> SendPutRequestAsync<T>(string url, string token, T body) where T : class;
 
+    Task<T> SendPostRequestAsync<T>(string url, Dictionary<string, string> formData);
+
     Task<T> SendGetRequestAsync<T>(string endpoint, string token);
 
     Task<RestResponse> SendDeleteRequestAsync(string endpoint, string token);

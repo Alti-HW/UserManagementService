@@ -17,6 +17,8 @@ public class KeyCloakConfiguration
     public string TokenUrl { get; set; }
 
     public string ServerUrl { get; set; }
+    
+    public string RedirectUri { get; set; }
 
     public string Username { get; set; }
 

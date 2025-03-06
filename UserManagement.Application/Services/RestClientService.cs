@@ -52,6 +52,29 @@ public class RestClientService : IRestClientService
         return await client.ExecutePostAsync(request);
     }
 
+    public async Task<T> SendPostRequestAsync<T>(string url, Dictionary<string, string> formData)
+    {
+        var options = new RestClientOptions(url);
+        var client = new RestClient(options);
+        
+        var request = new RestRequest().AddHeader("Content-Type", "application/x-www-form-urlencoded");
+        
+        foreach (var param in formData)
+        {
+            request.AddParameter(param.Key, param.Value);
+        }
+
+        var response =  await client.ExecutePostAsync(request);
+
+        if (response is null || !response.IsSuccessful || string.IsNullOrWhiteSpace(response.Content))
+        {
+            return default;
+        }
+
+        return JsonConvert.DeserializeObject<T>(response.Content);
+    }
+
+
     public async Task<RestResponse> SendPutRequestAsync<T>(string url, string token, T body) where T : class
     {
         var client = new RestClient();

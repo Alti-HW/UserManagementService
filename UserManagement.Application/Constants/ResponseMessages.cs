@@ -3,6 +3,8 @@
 public static class ResponseMessages
 {
     public const string InvalidRequest = "Invalid request data.";
+    public const string InvalidRedirectUrl = "Invalid redirect URL";
+    public const string InvalidAuthCode = "Invalid authorization code";
     public const string NoDataFound = "No data found for the provided criteria.";
     public const string DataRetrieved = "Data retrieved successfully.";
     public const string RecordCreated = "New {Record} created successfully.";

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using UserManagement.Application.Configuration;
 using UserManagement.Application.Extensions;
 using UserManagement.Application.Interfaces;
@@ -13,10 +14,9 @@ using UserManagement.Application.Services;
 using UserManagement.Application.Validator;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var services = builder.Services;
 var configuration = builder.Configuration;
-
-//builder.WebHost.UseUrls("http://localhost:5226");
 
 // Add services to the container.
 builder.Services.AddHttpClient();
@@ -56,6 +56,11 @@ services.AddSwaggerGen(c =>
             new string[] { }
         }
     });
+
+    c.OperationFilter<SecurityRequirementsOperationFilter>();
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 // Add CORS policy
 builder.Services.AddCors(options =>
@@ -81,6 +86,7 @@ services.AddScoped<IRoleMappingService, RoleMappingService>();
 services.AddScoped<IRoleService, RoleService>();
 services.AddScoped<IAuthService, AuthService>();
 services.AddScoped<IPermissionService, PermissionService>();
+services.AddScoped<ISsoService, SsoService>();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
@@ -113,6 +119,8 @@ var app = builder.Build();
 // Enable CORS
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -125,8 +133,6 @@ app.UseGlobalExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
 
