@@ -4,7 +4,7 @@ namespace UserManagement.Application.Interfaces
 {
     public interface ISsoService
     {
-        Task<string> GetRedirectUrlAsync();
+        Task<string> GetRedirectUrlAsync(string provider = "");
 
         Task<KeycloakTokenResponseDto> GetTokenAsync(string authorizationCode);
     }

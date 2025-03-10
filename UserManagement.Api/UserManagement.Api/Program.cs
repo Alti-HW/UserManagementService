@@ -77,6 +77,9 @@ builder.Services.AddCors(options =>
 services.AddAutoMapper(typeof(AutoMapperProfile));
 
 services.Configure<KeyCloakConfiguration>(configuration.GetSection(KeyCloakConfiguration.Section));
+services.Configure<EmsUi>(configuration.GetSection(EmsUi.Section));
+services.Configure<SsoProvidersHintPath>(configuration.GetSection(SsoProvidersHintPath.Section));
+
 services.AddSingleton<ITokenService, TokenService>();
 services.AddSingleton<IRestClientService, RestClientService>();
 
