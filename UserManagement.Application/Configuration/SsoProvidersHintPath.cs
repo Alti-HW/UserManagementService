@@ -7,4 +7,6 @@ public class SsoProvidersHintPath
     public const string Section = nameof(SsoProvidersHintPath);
 
     public string Google { get; set; }
+    
+    public string GitHub { get; set; }
 }
