@@ -14,15 +14,15 @@ namespace UserManagement.Api.Controllers;
 [Route("api/[controller]")]
 [Authorize]
 [ApiController]
-public class RollMappingController : ControllerBase
+public class RoleMappingController : ControllerBase
 {
     private readonly IRoleMappingService roleMappingService;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RollMappingController"/> class.
+    /// Initializes a new instance of the <see cref="RoleMappingController"/> class.
     /// </summary>
     /// <param name="roleMappingService">The role mapping service.</param>
-    public RollMappingController(IRoleMappingService roleMappingService)
+    public RoleMappingController(IRoleMappingService roleMappingService)
     {
         this.roleMappingService = roleMappingService;
     }

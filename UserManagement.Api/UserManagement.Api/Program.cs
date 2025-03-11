@@ -57,10 +57,10 @@ services.AddSwaggerGen(c =>
         }
     });
 
-    c.OperationFilter<SecurityRequirementsOperationFilter>();
+    // c.OperationFilter<SecurityRequirementsOperationFilter>();
 
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    // var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    // c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 // Add CORS policy
 builder.Services.AddCors(options =>
