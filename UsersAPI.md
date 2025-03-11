@@ -1,7 +1,7 @@
 # User API
 
 ## Overview
-The **UsersController** manages user-related operations within the User Management API. It provides endpoints for creating, retrieving, updating, and deleting user records, as well as inviting new users. All endpoints require authentication.
+The **Users API** manages user-related operations within the User Management API. It provides endpoints for creating, retrieving, updating, and deleting user records, as well as inviting new users. All endpoints require authentication.
 
 ### Key Features:
 - Retrieve a list of users with filtering options
