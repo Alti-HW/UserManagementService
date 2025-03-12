@@ -109,7 +109,9 @@ Ensure that the following settings are configured in `app.settings`:
   | Feature             | URL/Instructions                        |
   |---------------------|----------------------------------------|
   | Swagger UI         | [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html) |
-  | Postman Collection |       |
+  | Postman Collection | [User Management Service.postman_collection](https://github.com/Alti-HW/UserManagementService/blob/master/Postman%20Collection/User%20Management%20Service.postman_collection      |
+  | Postman Environment | [UserManagement Service Dev.postman_environment](https://github.com/Alti-HW/UserManagementService/blob/master/Postman%20Collection/UserManagement%20Service%20Dev.postman_environment)  |
+  
 
 
 
