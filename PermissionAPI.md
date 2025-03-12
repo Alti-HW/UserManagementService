@@ -11,7 +11,7 @@ All endpoints require authentication via a Bearer Token.
 
 ## Base URL
 ```
-http://your-api-base-url/api/permissions
+http://localhost:5000/api/permissions
 ```
 
 ## Endpoints
@@ -28,7 +28,7 @@ POST /api/permissions/create
 
 #### Request:
 ```sh
-curl -X POST "http://your-api-base-url/api/permissions/create" \
+curl -X POST "http://localhost:5000/api/permissions/create" \
 -H "Authorization: Bearer <your_token>" \
 -H "Content-Type: application/json" \
 -d '{
@@ -78,7 +78,7 @@ GET /api/permissions/list
 
 #### Request:
 ```sh
-curl -X GET "http://your-api-base-url/api/permissions/list" \
+curl -X GET "http://localhost:5000/api/permissions/list" \
 -H "Authorization: Bearer <your_token>"
 ```
 
@@ -121,7 +121,7 @@ DELETE /api/permissions/delete
 
 #### Request:
 ```sh
-curl -X DELETE "http://your-api-base-url/api/permissions/delete?permissionId=123" \
+curl -X DELETE "http://localhost:5000/api/permissions/delete?permissionId=123" \
 -H "Authorization: Bearer <your_token>"
 ```
 
