@@ -1,0 +1,826 @@
+{
+	"info": {
+		"_postman_id": "69165aa9-00df-4add-8cd1-3eec90ce21ba",
+		"name": "EMS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2305723"
+	},
+	"item": [
+		{
+			"name": "User Management Services",
+			"item": [
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "GetAll",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/Users/Users?Email=vishwajeetvelapurkar%40gmail.com&EmailVerified=false&Enabled=true&Exact=false&First=0&FirstName=Vishwajeet&LastName=Velapurkar&Max=10&Username=vvelapurkar",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"Users",
+										"Users"
+									],
+									"query": [
+										{
+											"key": "Email",
+											"value": "vishwajeetvelapurkar%40gmail.com"
+										},
+										{
+											"key": "EmailVerified",
+											"value": "false"
+										},
+										{
+											"key": "Enabled",
+											"value": "true"
+										},
+										{
+											"key": "Exact",
+											"value": "false"
+										},
+										{
+											"key": "First",
+											"value": "0"
+										},
+										{
+											"key": "FirstName",
+											"value": "Vishwajeet"
+										},
+										{
+											"key": "LastName",
+											"value": "Velapurkar"
+										},
+										{
+											"key": "Max",
+											"value": "10"
+										},
+										{
+											"key": "Username",
+											"value": "vvelapurkar"
+										}
+									]
+								},
+								"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://localhost:7082/api/Users/Users?Email=vishwajeetvelapurkar%40gmail.com&EmailVerified=false&Enabled=true&Exact=false&First=0&FirstName=Vishwajeet&LastName=Velapurkar&Max=10&Username=vvelapurkar' \\\r\n  -H 'accept: */*'"
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUser",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n    \"username\": \"dileep154\",\r\n    \"firstName\": \"Basam\",\r\n    \"lastName\": \"Venkateswarlu 1\",\r\n    \"email\": \"basamdileepkumar25@gmail.com\",\r\n    \"emailVerified\": false,\r\n    \"enabled\": true,\r\n    \"created\": \"2025-02-05T21:43:23.576\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/Users",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"Users"
+									]
+								},
+								"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://localhost:7082/api/Users' \\\r\n  -H 'accept: */*' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"username\": \"pk-sai2\",\r\n  \"firstName\": \"Sai2\",\r\n  \"lastName\": \"PK\",\r\n  \"email\": \"saipk2@gmail.com\",\r\n  \"emailVerified\": false,\r\n  \"enabled\": true,\r\n  \"created\": \"2025-02-04T11:55:21.999\"\r\n}'"
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateUser",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"4e4f885b-ec85-4486-888e-a87edf2df3be\",\r\n    \"username\": \"dileep1\",\r\n    \"firstName\": \"Basam\",\r\n    \"lastName\": \"Venkateswarlu 1\",\r\n    \"email\": \"basamdileepkumar1@gmail.com\",\r\n    \"emailVerified\": false,\r\n    \"enabled\": true,\r\n    \"created\": \"2025-02-05T21:43:23.576\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/Users",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"Users"
+									]
+								},
+								"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://localhost:7082/api/Users' \\\r\n  -H 'accept: */*' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"id\": \"3fd7d69c-8012-4230-ac5d-6aa1e528f416\",\r\n  \"username\": \"pk-sai2\",\r\n  \"firstName\": \"Sai2\",\r\n  \"lastName\": \"PK\",\r\n  \"email\": \"saipk2@gmail.com\",\r\n  \"emailVerified\": false,\r\n  \"enabled\": true,\r\n  \"created\": \"2025-02-04T11:55:21.999\"\r\n}'"
+							},
+							"response": []
+						},
+						{
+							"name": "GetUser",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/Users/3fd7d69c-8012-4230-ac5d-6aa1e528f416",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"Users",
+										"3fd7d69c-8012-4230-ac5d-6aa1e528f416"
+									]
+								},
+								"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://localhost:7082/api/Users/3fd7d69c-8012-4230-ac5d-6aa1e528f416' \\\r\n  -H 'accept: */*'"
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteUser",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/Users/3fd7d69c-8012-4230-ac5d-6aa1e528f416",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"Users",
+										"3fd7d69c-8012-4230-ac5d-6aa1e528f416"
+									]
+								},
+								"description": "Generated from cURL: curl -X 'DELETE' \\\r\n  'https://localhost:7082/api/Users/3fd7d69c-8012-4230-ac5d-6aa1e528f416' \\\r\n  -H 'accept: */*'\r\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Invite User",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"Email\": \"new.user@example.com\",\n    \"FirstName\": \"New\",\n    \"LastName\": \"User\"\n}"
+								},
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/Users/invite",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"Users",
+										"invite"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Role Mapping Service",
+					"item": [
+						{
+							"name": "Assign Role to User",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"7477e651-ec11-40ac-b5d2-605464fd8361\",\r\n    \"roleRepresentation\": [\r\n        {\r\n            \"id\": \"6aacace1-8c7c-4611-b3d7-d5b2791d2890\",\r\n            \"name\": \"p1\",\r\n            \"description\": \"\",\r\n            \"composite\": false,\r\n            \"clientRole\": true\r\n        },\r\n        {\r\n            \"id\": \"8fe30498-aa4f-4f44-a1dc-b427b4fca3c9\",\r\n            \"name\": \"Floor_2\",\r\n            \"description\": \"Floors_2\",\r\n            \"composite\": false,\r\n            \"clientRole\": true\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/RoleMapping/user",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"RoleMapping",
+										"user"
+									]
+								},
+								"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://localhost:7082/api/RollMapping/user' \\\r\n  -H 'accept: */*' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"userId\": \"7477e651-ec11-40ac-b5d2-605464fd8361\",\r\n  \"roleRepresentation\": [\r\n     {\r\n            \"id\": \"afcd1cef-ea65-47e6-8931-741ad33591ba\",\r\n            \"name\": \"Building Manager\",\r\n            \"description\": \"{role-building-manager}\",\r\n            \"composite\": true,\r\n            \"clientRole\": true\r\n        }\r\n  ]\r\n}'"
+							},
+							"response": []
+						},
+						{
+							"name": "GetAvalibleUserRoles",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/RoleMapping/user/7477e651-ec11-40ac-b5d2-605464fd8361/available",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"RoleMapping",
+										"user",
+										"7477e651-ec11-40ac-b5d2-605464fd8361",
+										"available"
+									]
+								},
+								"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://localhost:7082/api/RollMapping/user/7477e651-ec11-40ac-b5d2-605464fd8361/available' \\\r\n  -H 'accept: text/plain'"
+							},
+							"response": []
+						},
+						{
+							"name": "GetAssingedRoles",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "text/plain"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/RoleMapping/user/7477e651-ec11-40ac-b5d2-605464fd8361",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"RoleMapping",
+										"user",
+										"7477e651-ec11-40ac-b5d2-605464fd8361"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								},
+								"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://localhost:7082/api/RollMapping/user/7477e651-ec11-40ac-b5d2-605464fd8361' \\\r\n  -H 'accept: text/plain'"
+							},
+							"response": []
+						},
+						{
+							"name": "Unassign Role",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "accept",
+										"value": "text/plain"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"7477e651-ec11-40ac-b5d2-605464fd8361\",\r\n    \"roleRepresentation\": [\r\n        {\r\n            \"id\": \"6aacace1-8c7c-4611-b3d7-d5b2791d2890\",\r\n            \"name\": \"p1\",\r\n            \"description\": \"\",\r\n            \"composite\": false,\r\n            \"clientRole\": true\r\n        },\r\n        {\r\n            \"id\": \"8fe30498-aa4f-4f44-a1dc-b427b4fca3c9\",\r\n            \"name\": \"Floor_2\",\r\n            \"description\": \"Floors_2\",\r\n            \"composite\": false,\r\n            \"clientRole\": true\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/RoleMapping/user",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"RoleMapping",
+										"user"
+									]
+								},
+								"description": "Generated from cURL: curl -X 'DELETE' \\\r\n  'https://localhost:7082/api/RollMapping/user' \\\r\n  -H 'accept: text/plain' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{\r\n  \"userId\": \"7477e651-ec11-40ac-b5d2-605464fd8361\",\r\n  \"roleRepresentation\": [\r\n    {\r\n        \"id\": \"4b720c7f-5d98-466f-82a9-b403878aba3f\",\r\n        \"name\": \"ems-building_admin\"\r\n    }\r\n  ]\r\n}'"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Authentication Service",
+					"item": [
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var response = pm.response.json();\r",
+											"\r",
+											"// Check if response contains tokens\r",
+											"if (response.success && response.data) {\r",
+											"    pm.environment.set(\"AccessToken\", response.data.access_Token);\r",
+											"    pm.environment.set(\"RefreshToken\", response.data.refresh_Token);\r",
+											"    \r",
+											"    console.log(\"Access Token and Refresh Token saved to environment variables.\");\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"Email\": \"mvgokul@altimetrik.com\",\n    \"Password\": \"123\"\n}"
+								},
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/auth/login",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Logout",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"RefreshToken\": \"eyJhbGciOiJIUzI1...\"\n}"
+								},
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/auth/logout",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Permission Service",
+					"item": [
+						{
+							"name": "Create Permission",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"ManageUsers\",\n    \"description\": \"Permission to manage user accounts\"\n}"
+								},
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/permissions/create",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"permissions",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Permissions",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/permissions/list",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"permissions",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Permission",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/permissions/delete?permissionId=123",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"permissions",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "permissionId",
+											"value": "123",
+											"description": "ID of the permission to delete"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Role Service",
+					"item": [
+						{
+							"name": "Create Role",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"Name\": \"Admin\",\n    \"Description\": \"Administrator role\",\n    \"CompositeRoles\": []\n}"
+								},
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/roles/create",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"roles",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Roles",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/roles/list",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"roles",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Role by ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/roles/get?roleId=12345",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"roles",
+										"get"
+									],
+									"query": [
+										{
+											"key": "roleId",
+											"value": "12345",
+											"description": "ID of the role to retrieve"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Role",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/roles/delete?roleId=12345",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"roles",
+										"delete"
+									],
+									"query": [
+										{
+											"key": "roleId",
+											"value": "12345",
+											"description": "ID of the role to delete"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Role Permissions",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{AccessToken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"Name\": \"Admin\",\n    \"CompositeRoles\": [\n        {\n            \"Id\": \"123\",\n            \"Name\": \"User\",\n            \"ClientRole\": true,\n            \"ContainerId\": \"456\"\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/roles/update-rolepermissions",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"roles",
+										"update-rolepermissions"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "SSO Service",
+					"item": [
+						{
+							"name": "SSO Callback",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/sso/callback?code=123456&session_state=xyz&iss=google",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"sso",
+										"callback"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "123456",
+											"description": "Authorization code received from the SSO provider."
+										},
+										{
+											"key": "session_state",
+											"value": "xyz",
+											"description": "Session state returned by the SSO provider."
+										},
+										{
+											"key": "iss",
+											"value": "google",
+											"description": "Issuer identifier indicating the SSO provider."
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SSO Login",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{UserServiceUrl}}/api/sso/login?provider=google",
+									"host": [
+										"{{UserServiceUrl}}"
+									],
+									"path": [
+										"api",
+										"sso",
+										"login"
+									],
+									"query": [
+										{
+											"key": "provider",
+											"value": "google",
+											"description": "The name of the SSO provider. Defaults if empty."
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
