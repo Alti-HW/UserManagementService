@@ -1,18 +1,37 @@
 # UserManagementService
 
 ## Project Overview
-The User Management API provides secure authentication, authorization, and access control through modular APIs. All endpoints require authentication. These APIs act as proxy APIs that internally communicate with Keycloak's REST APIs.
+- ### Name UserManagement.Api
+- ### Description
+  The User Management API provides secure authentication, authorization, and access control through modular APIs. All endpoints require authentication. These APIs act as proxy APIs that internally communicate   with Keycloak's REST APIs.
 
-Keycloak is used as the IAM (Identity and Access Management) provider.
+  Keycloak is used as the IAM (Identity and Access Management) provider.
 
-**Key Components**
+  **Key Components**
 
-- **Authentication API:** Manages user login and logout using access and refresh tokens.
-- **SSO API:** Supports Single Sign-On authentication via external providers.
-- **Users API:** Handles user records (create, retrieve, update, delete) and user invitations.
-- **Role Management API:** Manages role creation, retrieval, updates, and deletion, including composite roles.
-- **Role Mapping API:** Handles user role assignments (assign/unassign roles).
-- **Permission API:** Manages user permissions (create, retrieve, delete permissions).
+  - **Authentication API:** Manages user login and logout using access and refresh tokens.
+  - **SSO API:** Supports Single Sign-On authentication via external providers.
+  - **Users API:** Handles user records (create, retrieve, update, delete) and user invitations.
+  - **Role Management API:** Manages role creation, retrieval, updates, and deletion, including composite roles.
+  - **Role Mapping API:** Handles user role assignments (assign/unassign roles).
+  - **Permission API:** Manages user permissions (create, retrieve, delete permissions).
+  
+- ### Technology Stack
+  | Category          | Technology Used                                                                                         |
+  |------------------|------------------------------------------------------------------------------------------------------|
+  | Backend         | .NET 8, RestSharp                                                                                      |
+  | Database       | PostgreSQL                                                                                            |
+  | IAM Provider   | Keycloak                                                                                               |
+  | Packages       | **Authentication:** Microsoft.AspNetCore.Authentication.JwtBearer  |
+  |                | **API Documentation:** Swashbuckle.AspNetCore, Swashbuckle.AspNetCore.Annotations, Swashbuckle.AspNetCore.Filters |
+  |                | **Object Mapping:** AutoMapper |
+  |                | **Validation:** FluentValidation, FluentValidation.AspNetCore |
+  |                | **Dependency Injection:** Microsoft.Extensions.DependencyInjection |
+  |                | **Options Pattern:** Microsoft.Extensions.Options |
+  |                | **Security Tokens:** Microsoft.IdentityModel.Tokens, System.IdentityModel.Tokens.Jwt |
+  |                | **JSON Handling:** Newtonsoft.Json |
+  |                | **Email Handling:** NETCore.MailKit |
+
 
 ## Installation Steps  
 #### **1. Clone the repository** 
@@ -65,7 +84,7 @@ Keycloak is used as the IAM (Identity and Access Management) provider.
 Use this [guide](https://github.com/Alti-HW/IdentityAndAccessManagement/blob/master/KeycloakConfiguration.md) to configure keycloak
 
 
-#### **5 Environment Configuration**
+#### **5. Environment Configuration**
 
 Ensure that the following settings are configured in `app.settings`:
 
