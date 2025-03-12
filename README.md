@@ -147,6 +147,23 @@
 ### High-Level Design (HLD)
 
   ![image](https://github.com/user-attachments/assets/198ed5be-7ba3-44fb-8dda-6e1f45b2ae63)
+### Low-Level Design
+
+  - #### Normal API flow
+
+      ![image](https://github.com/user-attachments/assets/28cde670-c911-4a4c-9f05-225f91ddfef2)
+    
+  - #### Keycloak and LDAP Authentication Flow
+
+      ![image](https://github.com/user-attachments/assets/2bad3276-6a77-4b61-bd84-5e3da0a6335e)
+
+  - #### SSO Flow
+    ![image](https://github.com/user-attachments/assets/c702b4de-ebba-485f-ac5b-ae72b489490f)
+
+
+
+     
+
 
 
   
