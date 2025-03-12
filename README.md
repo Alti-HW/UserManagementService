@@ -119,6 +119,12 @@ Ensure that the following settings are configured in `app.settings`:
   - [Role Mapping API](https://github.com/Alti-HW/UserManagementService/blob/master/Docs/RoleMappingAPI.md)
   - [Single Sign-On (SSO) API](https://github.com/Alti-HW/UserManagementService/blob/master/Docs/SingleSignOnAPI.md)
   - [User API](https://github.com/Alti-HW/UserManagementService/blob/master/Docs/UsersAPI.md)
+
+### Import Postman
+  Use the following Postman setup guide to import the collection and environment into your local Postman:
+
+  [Postman Setup Guide](https://github.com/Alti-HW/UserManagementService/blob/master/Docs/PostmanSetupGuide.md)
+
   
 
 
