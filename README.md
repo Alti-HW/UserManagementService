@@ -2,11 +2,17 @@
 
 ## Project Overview
 - ### Name
-  UserManagement.Api
+  UserManagementService
 - ### Description
-  The User Management API provides secure authentication, authorization, and access control through modular APIs. All endpoints require authentication. These APIs act as proxy APIs that internally communicate   with Keycloak's REST APIs.
-
-  Keycloak is used as the IAM (Identity and Access Management) provider.
+    The User Management Service serves as an orchestration layer even though Keycloak manages user authentication and role assignments. The User Management API provides secure authentication, authorization, and access control through modular APIs. All endpoints require authentication. These APIs act as proxy APIs that internally communicate with Keycloak's REST APIs. Keycloak is used as the IAM (Identity and Access Management) provider.
+    
+    Why is the .NET Microservice Needed as an Orchestration Layer?
+    **Centralized API Gateway for Clients**
+    Clients (Frontend, Mobile, Other Services) never directly interact with Keycloak/Okta.
+    Instead, they call UMS, which acts as a gateway for:
+    Authentication (via Keycloak)
+    User profile management
+    Fetching role-based permissions
 
   **Key Components**
 
@@ -17,21 +23,21 @@
   - **Role Mapping API:** Handles user role assignments (assign/unassign roles).
   - **Permission API:** Manages user permissions (create, retrieve, delete permissions).
   
-- ### Technology Stack
-    | Category          | Technology Used                                                                                         |
-    |------------------|------------------------------------------------------------------------------------------------------|
-    | Backend         | .NET 8, RestSharp                                                                                      |
-    | Database       | PostgreSQL                                                                                            |
-    | IAM Provider   | Keycloak                                                                                               |
-    | Packages       | **Authentication:** Microsoft.AspNetCore.Authentication.JwtBearer  |
-    |                | **API Documentation:** Swashbuckle.AspNetCore, Swashbuckle.AspNetCore.Annotations, Swashbuckle.AspNetCore.Filters |
-    |                | **Object Mapping:** AutoMapper |
-    |                | **Validation:** FluentValidation, FluentValidation.AspNetCore |
-    |                | **Dependency Injection:** Microsoft.Extensions.DependencyInjection |
-    |                | **Options Pattern:** Microsoft.Extensions.Options |
-    |                | **Security Tokens:** Microsoft.IdentityModel.Tokens, System.IdentityModel.Tokens.Jwt |
-    |                | **JSON Handling:** Newtonsoft.Json |
-    |                | **Email Handling:** NETCore.MailKit |
+## Technology Stack
+| Category       | Technology Used                                                                                      |
+|----------------|------------------------------------------------------------------------------------------------------|
+| Backend        | .NET 8, RestSharp                                                                                    |
+| Database       | PostgreSQL                                                                                           |
+| IAM Provider   | Keycloak                                                                                             |
+| Packages       | **Authentication:** Microsoft.AspNetCore.Authentication.JwtBearer                                    |
+|                | **API Documentation:** Swashbuckle.AspNetCore, Swashbuckle.AspNetCore.Annotations, Swashbuckle.AspNetCore.Filters |
+|                | **Object Mapping:** AutoMapper                                                                       |
+|                | **Validation:** FluentValidation, FluentValidation.AspNetCore                                        |
+|                | **Dependency Injection:** Microsoft.Extensions.DependencyInjection                                   |
+|                | **Options Pattern:** Microsoft.Extensions.Options                                                    |
+|                | **Security Tokens:** Microsoft.IdentityModel.Tokens, System.IdentityModel.Tokens.Jwt                 |
+|                | **JSON Handling:** Newtonsoft.Json                                                                   |
+|                | **Email Handling:** NETCore.MailKit                                                                  |
 
 
 ## Installation Steps  
@@ -87,7 +93,7 @@
 #### **5. Environment Configuration**
   Ensure that the following settings are configured in `app.settings`:
 
-- ##### - Keycloak Service
+- ##### Keycloak Service
 
     | Key      |Value     |
     |-------------|-------------------------------------------------|
