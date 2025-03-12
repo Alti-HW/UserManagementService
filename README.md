@@ -108,7 +108,7 @@ Ensure that the following settings are configured in `app.settings`:
 
   | Feature             | URL/Instructions                        |
   |---------------------|----------------------------------------|
-  | Swagger UI         | [http://localhost:5000/swagger](http://localhost:5000/swagger) |
+  | Swagger UI         | [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html) |
   | Postman Collection |       |
 
 
