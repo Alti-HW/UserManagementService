@@ -14,4 +14,50 @@ Keycloak is used as the IAM (Identity and Access Management) provider.
 - **Role Mapping API:** Handles user role assignments (assign/unassign roles).
 - **Permission API:** Manages user permissions (create, retrieve, delete permissions).
 
+### **Prerequisites**  
+
+#### **1. Install Required Tools**  
+
+- **.NET 8 SDK** → [Download](https://dotnet.microsoft.com/en-us/download)  
+  - Verify installation:  
+    ```sh
+    dotnet --version
+    ```
+  
+- **PostgreSQL** → [Download](https://www.postgresql.org/download/)  
+  - Verify installation:  
+    ```sh
+    psql -U postgres
+    ```
+
+- **Keycloak**  
+  - Use the following custom URL to install Keycloak:  
+    [Keycloak Installation Guide](https://github.com/Alti-HW/IdentityAndAccessManagement/blob/master/README.md)
+
+- **Development Tools**  
+  - Visual Studio 2022+ / VS Code (with C# extension)  
+  - Postman / Swagger (for API testing)  
+  - Docker (if containerizing the application)  
+
+---
+
+#### **2. Configure the Database**  
+
+- **Create a PostgreSQL database**:  
+  ```sql
+  CREATE DATABASE my_database;
+  ```
+
+- **Install Entity Framework Core (if using EF Core)**:  
+  ```sh
+  dotnet tool install --global dotnet-ef
+  dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+  ```
+
+---
+
+#### **3. Configure Keycloak**  
+
+Use this [guide](https://github.com/Alti-HW/IdentityAndAccessManagement/blob/master/KeycloakConfiguration.md) to configure keycloak
+
 ## Installation Steps
