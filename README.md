@@ -1,7 +1,8 @@
 # UserManagementService
 
 ## Project Overview
-- ### Name UserManagement.Api
+- ### Name
+  UserManagement.Api
 - ### Description
   The User Management API provides secure authentication, authorization, and access control through modular APIs. All endpoints require authentication. These APIs act as proxy APIs that internally communicate   with Keycloak's REST APIs.
 
