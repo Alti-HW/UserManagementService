@@ -17,20 +17,20 @@
   - **Permission API:** Manages user permissions (create, retrieve, delete permissions).
   
 - ### Technology Stack
-  | Category          | Technology Used                                                                                         |
-  |------------------|------------------------------------------------------------------------------------------------------|
-  | Backend         | .NET 8, RestSharp                                                                                      |
-  | Database       | PostgreSQL                                                                                            |
-  | IAM Provider   | Keycloak                                                                                               |
-  | Packages       | **Authentication:** Microsoft.AspNetCore.Authentication.JwtBearer  |
-  |                | **API Documentation:** Swashbuckle.AspNetCore, Swashbuckle.AspNetCore.Annotations, Swashbuckle.AspNetCore.Filters |
-  |                | **Object Mapping:** AutoMapper |
-  |                | **Validation:** FluentValidation, FluentValidation.AspNetCore |
-  |                | **Dependency Injection:** Microsoft.Extensions.DependencyInjection |
-  |                | **Options Pattern:** Microsoft.Extensions.Options |
-  |                | **Security Tokens:** Microsoft.IdentityModel.Tokens, System.IdentityModel.Tokens.Jwt |
-  |                | **JSON Handling:** Newtonsoft.Json |
-  |                | **Email Handling:** NETCore.MailKit |
+    | Category          | Technology Used                                                                                         |
+    |------------------|------------------------------------------------------------------------------------------------------|
+    | Backend         | .NET 8, RestSharp                                                                                      |
+    | Database       | PostgreSQL                                                                                            |
+    | IAM Provider   | Keycloak                                                                                               |
+    | Packages       | **Authentication:** Microsoft.AspNetCore.Authentication.JwtBearer  |
+    |                | **API Documentation:** Swashbuckle.AspNetCore, Swashbuckle.AspNetCore.Annotations, Swashbuckle.AspNetCore.Filters |
+    |                | **Object Mapping:** AutoMapper |
+    |                | **Validation:** FluentValidation, FluentValidation.AspNetCore |
+    |                | **Dependency Injection:** Microsoft.Extensions.DependencyInjection |
+    |                | **Options Pattern:** Microsoft.Extensions.Options |
+    |                | **Security Tokens:** Microsoft.IdentityModel.Tokens, System.IdentityModel.Tokens.Jwt |
+    |                | **JSON Handling:** Newtonsoft.Json |
+    |                | **Email Handling:** NETCore.MailKit |
 
 
 ## Installation Steps  
@@ -80,39 +80,37 @@
 ---
 
 #### **4. Configure Keycloak**  
-
-Use this [guide](https://github.com/Alti-HW/IdentityAndAccessManagement/blob/master/KeycloakConfiguration.md) to configure keycloak
+  Use this [guide](https://github.com/Alti-HW/IdentityAndAccessManagement/blob/master/KeycloakConfiguration.md) to configure keycloak
 
 
 #### **5. Environment Configuration**
-
-Ensure that the following settings are configured in `app.settings`:
+  Ensure that the following settings are configured in `app.settings`:
 
 - ##### - Keycloak Service
 
-  | Key      |Value     |
-  |-------------|-------------------------------------------------|
-  | Realm       | Alti-EMS     |
-  | ClientId    | EMS          |
-  | ClientSecret | q66B31Pde4NfC9LNM6EULSGOzfRJj0Re   |
-  | TokenUrl    | http://localhost:8080/realms/Alti-EMS/protocol/openid-connect/token   |
-  | ServerUrl   | http://localhost:8080   |
-  | Username    | mvgokul@altimetrik.com   |
-  | Password    | 123          |
-  | RedirectUri | http://localhost:5000/api/sso/callback  |
+    | Key      |Value     |
+    |-------------|-------------------------------------------------|
+    | Realm       | Alti-EMS     |
+    | ClientId    | EMS          |
+    | ClientSecret | q66B31Pde4NfC9LNM6EULSGOzfRJj0Re   |
+    | TokenUrl    | http://localhost:8080/realms/Alti-EMS/protocol/openid-connect/token   |
+    | ServerUrl   | http://localhost:8080   |
+    | Username    | mvgokul@altimetrik.com   |
+    | Password    | 123          |
+    | RedirectUri | http://localhost:5000/api/sso/callback  |
 
 - ##### EMS UI
 
-  | Key | Value      |
-  |---------|---------------------------------------------------|
-  | BaseUrl | http://localhost:3000  |
+    | Key | Value      |
+    |---------|---------------------------------------------------|
+    | BaseUrl | http://localhost:3000  |
 
 - ##### SSO Providers Hint Path
 
-  | Provider | Key     |
-  |----------|--------|
-  | Google   | google |
-  | GitHub   | github |
+    | Provider | Key     |
+    |----------|--------|
+    | Google   | google |
+    | GitHub   | github |
 
 #### **6. Run the Project**
 
