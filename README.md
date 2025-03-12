@@ -111,6 +111,14 @@ Ensure that the following settings are configured in `app.settings`:
   | Swagger UI         | [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html) |
   | Postman Collection | [User Management Service.postman_collection](https://github.com/Alti-HW/UserManagementService/blob/master/Postman%20Collection/User%20Management%20Service.postman_collection)     |
   | Postman Environment | [UserManagement Service Dev.postman_environment](https://github.com/Alti-HW/UserManagementService/blob/master/Postman%20Collection/UserManagement%20Service%20Dev.postman_environment)  |
+
+  Please find detailed API documentation below
+  - [Authentication API](https://github.com/Alti-HW/UserManagementService/blob/master/Docs/AuthenticationAPI.md)
+  - [Permission API](https://github.com/Alti-HW/UserManagementService/blob/master/Docs/PermissionAPI.md)
+  - [Role Management API](https://github.com/Alti-HW/UserManagementService/blob/master/Docs/RoleManagementAPI.md)
+  - [Role Mapping API](https://github.com/Alti-HW/UserManagementService/blob/master/Docs/RoleMappingAPI.md)
+  - [Single Sign-On (SSO) API](https://github.com/Alti-HW/UserManagementService/blob/master/Docs/SingleSignOnAPI.md)
+  - [User API](https://github.com/Alti-HW/UserManagementService/blob/master/Docs/UsersAPI.md)
   
 
 
