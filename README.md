@@ -15,8 +15,13 @@ Keycloak is used as the IAM (Identity and Access Management) provider.
 - **Permission API:** Manages user permissions (create, retrieve, delete permissions).
 
 ## Installation Steps  
+#### **1. Clone the repository** 
+  ```
+  git clone <repository_url>
+  cd <repository_name>
+  ```
 
-#### **1. Install Required Tools**  
+#### **2. Install Required Tools**  
 
 - **.NET 8 SDK** → [Download](https://dotnet.microsoft.com/en-us/download)  
   - Verify installation:  
@@ -41,7 +46,7 @@ Keycloak is used as the IAM (Identity and Access Management) provider.
 
 ---
 
-#### **2. Configure the Database**  
+#### **3. Configure the Database**  
 
 - **Create a PostgreSQL database**:  
   ```sql
@@ -55,12 +60,12 @@ Keycloak is used as the IAM (Identity and Access Management) provider.
   ```
 ---
 
-#### **3. Configure Keycloak**  
+#### **4. Configure Keycloak**  
 
 Use this [guide](https://github.com/Alti-HW/IdentityAndAccessManagement/blob/master/KeycloakConfiguration.md) to configure keycloak
 
 
-#### **4 Environment Configuration**
+#### **5 Environment Configuration**
 
 Ensure that the following settings are configured in `app.settings`:
 
@@ -90,7 +95,7 @@ Ensure that the following settings are configured in `app.settings`:
   | Google   | google |
   | GitHub   | github |
 
-#### **5. Run the Project**
+#### **6. Run the Project**
 
 - ##### Start the Project
 
@@ -98,6 +103,13 @@ Ensure that the following settings are configured in `app.settings`:
   dotnet run
   ```
 - Test the API Endpoints using Postman or Swagger.
+
+## API Documentation
+
+  | Feature             | URL/Instructions                        |
+  |---------------------|----------------------------------------|
+  | Swagger UI         | [http://localhost:5000/swagger](http://localhost:5000/swagger) |
+  | Postman Collection |       |
 
 
 
