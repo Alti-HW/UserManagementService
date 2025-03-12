@@ -14,7 +14,7 @@ Keycloak is used as the IAM (Identity and Access Management) provider.
 - **Role Mapping API:** Handles user role assignments (assign/unassign roles).
 - **Permission API:** Manages user permissions (create, retrieve, delete permissions).
 
-### **Prerequisites**  
+## Installation Steps  
 
 #### **1. Install Required Tools**  
 
@@ -53,11 +53,10 @@ Keycloak is used as the IAM (Identity and Access Management) provider.
   dotnet tool install --global dotnet-ef
   dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
   ```
-
 ---
 
 #### **3. Configure Keycloak**  
 
 Use this [guide](https://github.com/Alti-HW/IdentityAndAccessManagement/blob/master/KeycloakConfiguration.md) to configure keycloak
 
-## Installation Steps
+
