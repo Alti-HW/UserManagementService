@@ -30,8 +30,8 @@ curl -X POST "http://localhost:5000/api/roles/create" \
      }'
 ```
 ##### Related Models
-1. [Role Request Dto](#rolerequestdto)
-2. [Client Role Dto](#clientroledto)
+1. RoleRequestDto
+2. ClientRoleDto
 
 #### Response Fields:
 
@@ -66,7 +66,7 @@ curl -X GET "http://localhost:5000/api/roles/list" \
 |----------|--------|----------------------------|
 | success  | bool   | Status of the request      |
 | message  | string | Response message           |
-| data     | array  | List of [roles](#roleresponsedto)              |
+| data     | array  | List of RoleResponseDto    |
 
 #### Sample Response:
 ```json
@@ -104,7 +104,7 @@ curl -X GET "http://localhost:5000/api/roles/get?roleId=12345" \
 |----------|--------|----------------------------|
 | success  | bool   | Status of the request      |
 | message  | string | Response message           |
-| data     | object | [Role](https://github.com/Alti-HW/UserManagementService/new/master#3-roleresponsedto) details               |
+| data     | object | RoleResponseDto details    |
 
 #### Sample Response:
 ```json
@@ -165,10 +165,8 @@ curl -X POST "http://localhost:5000/api/roles/update-rolepermissions" \
      }'
 ```
 ##### Related Models
-1. [Role Request Dto](#rolerequestdto)
-2. [Client Role Dto](#clientroledto)
-
-
+1. RoleRequestDto
+2. ClientRoleDto
 
 #### Response Fields:
 | Field    | Type   | Description                |
