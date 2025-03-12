@@ -142,6 +142,13 @@
 
   [Postman Setup Guide](https://github.com/Alti-HW/UserManagementService/blob/master/Docs/PostmanSetupGuide.md)
 
+## Flow Diagrams
+
+### High-Level Design (HLD)
+
+  ![image](https://github.com/user-attachments/assets/198ed5be-7ba3-44fb-8dda-6e1f45b2ae63)
+
+
   
 
 
