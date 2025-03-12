@@ -60,3 +60,45 @@ Keycloak is used as the IAM (Identity and Access Management) provider.
 Use this [guide](https://github.com/Alti-HW/IdentityAndAccessManagement/blob/master/KeycloakConfiguration.md) to configure keycloak
 
 
+#### **4 Environment Configuration**
+
+Ensure that the following settings are configured in `app.settings`:
+
+- ##### - Keycloak Service
+
+  | Key      |Value     |
+  |-------------|-------------------------------------------------|
+  | Realm       | Alti-EMS     |
+  | ClientId    | EMS          |
+  | ClientSecret | q66B31Pde4NfC9LNM6EULSGOzfRJj0Re   |
+  | TokenUrl    | http://localhost:8080/realms/Alti-EMS/protocol/openid-connect/token   |
+  | ServerUrl   | http://localhost:8080   |
+  | Username    | mvgokul@altimetrik.com   |
+  | Password    | 123          |
+  | RedirectUri | http://localhost:5000/api/sso/callback  |
+
+- ##### EMS UI
+
+  | Key | Value      |
+  |---------|---------------------------------------------------|
+  | BaseUrl | http://localhost:3000  |
+
+- ##### SSO Providers Hint Path
+
+  | Provider | Key     |
+  |----------|--------|
+  | Google   | google |
+  | GitHub   | github |
+
+#### **5. Run the Project**
+
+- ##### Start the Project
+
+  ```sh
+  dotnet run
+  ```
+- Test the API Endpoints using Postman or Swagger.
+
+
+
+
