@@ -46,11 +46,11 @@ curl -X POST "http://localhost:5000/api/permissions/create" \
 ```
 
 #### Response:
-| Field   | Type    | Description                              |
-|---------|--------|------------------------------------------|
-| success | bool   | Indicates whether the request was successful. |
-| message | string | Response message.                        |
-| data    | object | The created permission details.         |
+| Field   | Type    | Description                                                                                          |
+|---------|---------|------------------------------------------------------------------------------------------------------|
+| success | bool    | Indicates whether the request was successful.                                                        |
+| message | string  | Response message.                                                                                    |
+| data    | object  | The created permission details.                                                                      |
 
 #### Sample Response:
 ```json
@@ -83,11 +83,11 @@ curl -X GET "http://localhost:5000/api/permissions/list" \
 ```
 
 #### Response:
-| Field   | Type    | Description                              |
-|---------|--------|------------------------------------------|
-| success | bool   | Indicates whether the request was successful. |
-| message | string | Response message.                        |
-| data    | array  | List of permissions.                     |
+| Field   | Type    | Description                                                                                          |
+|---------|---------|------------------------------------------------------------------------------------------------------|
+| success | bool    | Indicates whether the request was successful.                                                        |
+| message | string  | Response message.                                                                                    |
+| data    | array   | List of permissions.                                                                                 |
 
 #### Sample Response:
 ```json
@@ -126,16 +126,16 @@ curl -X DELETE "http://localhost:5000/api/permissions/delete?permissionId=123" \
 ```
 
 #### Query Parameters:
-| Parameter    | Type   | Required | Description                    |
-|-------------|--------|----------|--------------------------------|
-| permissionId | string | Yes      | ID of the permission to delete. |
+| Parameter    | Type   | Required | Description                                                                           |
+|--------------|--------|----------|---------------------------------------------------------------------------------------|
+| permissionId | string | Yes      | ID of the permission to delete.                                                       |
 
 #### Response:
-| Field   | Type    | Description                              |
-|---------|--------|------------------------------------------|
-| success | bool   | Indicates whether the request was successful. |
-| message | string | Response message.                        |
-| data    | bool   | `true` if deleted, `false` otherwise.    |
+| Field   | Type    | Description                                                                                          |
+|---------|---------|------------------------------------------------------------------------------------------------------|
+| success | bool    | Indicates whether the request was successful.                                                        |
+| message | string  | Response message.                                                                                    |
+| data    | bool    | `true` if deleted, `false` otherwise.                                                                |
 
 #### Sample Response (Success):
 ```json
@@ -162,19 +162,19 @@ curl -X DELETE "http://localhost:5000/api/permissions/delete?permissionId=123" \
 ### 1. Permission Model
 This model represents a permission entity in the system.
 
-| Field       | Type   | Required | Description                   |
-|------------|--------|----------|--------------------------------|
-| name       | string | Yes      | Name of the permission.       |
-| description | string | No      | Description of the permission. |
+| Field       | Type   | Required | Description                                                                           |
+|-------------|--------|----------|---------------------------------------------------------------------------------------|
+| name        | string | Yes      | Name of the permission.                                                               |
+| description | string | No       | Description of the permission.                                                        |
 
 ### 2. ApiResponse Model
 This model represents the standard API response format.
 
-| Field   | Type    | Description                              |
-|---------|--------|------------------------------------------|
-| success | bool   | Indicates if the request was successful. |
-| message | string | Response message.                        |
-| data    | object | Response data, varies per request.       |
+| Field   | Type    | Description                                                                                         |
+|---------|---------|-----------------------------------------------------------------------------------------------------|
+| success | bool    | Indicates if the request was successful.                                                            |
+| message | string  | Response message.                                                                                   |
+| data    | object  | Response data, varies per request.                                                                  |
 
 ---
 
